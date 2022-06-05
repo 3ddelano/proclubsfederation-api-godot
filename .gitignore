@@ -1,0 +1,4 @@
+.env
+*.import
+logs/
+proclubsfederation-api-godot.v*.zip

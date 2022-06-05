@@ -1,0 +1,272 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[ {
+"base": "Reference",
+"class": "AuthorizeParams",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/rest/param_entity/AuthorizeParams.gd"
+}, {
+"base": "Reference",
+"class": "Award",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/entity/Award.gd"
+}, {
+"base": "Reference",
+"class": "ChangePermissionsParams",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/rest/param_entity/ChangePermissionsParams.gd"
+}, {
+"base": "Reference",
+"class": "Club",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/entity/Club.gd"
+}, {
+"base": "Reference",
+"class": "ClubMember",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/entity/ClubMember.gd"
+}, {
+"base": "Reference",
+"class": "ClubSlots",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/entity/ClubSlots.gd"
+}, {
+"base": "Reference",
+"class": "CreateAwardParams",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/rest/param_entity/CreateAwardParams.gd"
+}, {
+"base": "Reference",
+"class": "CreateClubParams",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/rest/param_entity/CreateClubParams.gd"
+}, {
+"base": "Reference",
+"class": "CreateInviteParams",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/rest/param_entity/CreateInviteParams.gd"
+}, {
+"base": "Reference",
+"class": "CreateItemParams",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/rest/param_entity/CreateItemParams.gd"
+}, {
+"base": "Reference",
+"class": "CreateMemberParams",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/rest/param_entity/CreateMemberParams.gd"
+}, {
+"base": "Reference",
+"class": "CreateTransactionParams",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/rest/param_entity/CreateTransactionParams.gd"
+}, {
+"base": "Reference",
+"class": "CreateUserParams",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/rest/param_entity/CreateUserParams.gd"
+}, {
+"base": "Reference",
+"class": "GiveAwardParams",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/rest/param_entity/GiveAwardParams.gd"
+}, {
+"base": "Reference",
+"class": "HTTPResponse",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/rest/HTTPResponse.gd"
+}, {
+"base": "Reference",
+"class": "Invite",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/entity/Invite.gd"
+}, {
+"base": "Reference",
+"class": "Item",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/entity/Item.gd"
+}, {
+"base": "Reference",
+"class": "JoinClubParams",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/rest/param_entity/JoinClubParams.gd"
+}, {
+"base": "Reference",
+"class": "ModifyAwardParams",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/rest/param_entity/ModifyAwardParams.gd"
+}, {
+"base": "Reference",
+"class": "ModifyClubParams",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/rest/param_entity/ModifyClubParams.gd"
+}, {
+"base": "Reference",
+"class": "ModifyItemParams",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/rest/param_entity/ModifyItemParams.gd"
+}, {
+"base": "Reference",
+"class": "ModifyMemberParams",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/rest/param_entity/ModifyMemberParams.gd"
+}, {
+"base": "Reference",
+"class": "ModifyMemberSlotsParams",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/rest/param_entity/ModifyMemberSlotsParams.gd"
+}, {
+"base": "Reference",
+"class": "ModifyUserParams",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/rest/param_entity/ModifyUserParams.gd"
+}, {
+"base": "Node",
+"class": "PCFClient",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/PCFClient.gd"
+}, {
+"base": "Reference",
+"class": "PCFMetadata",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/PCFMetadata.gd"
+}, {
+"base": "Reference",
+"class": "PCFUtils",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/PCFUtils.gd"
+}, {
+"base": "Reference",
+"class": "PartialAward",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/entity/PartialAward.gd"
+}, {
+"base": "Reference",
+"class": "PartialClub",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/entity/PartialClub.gd"
+}, {
+"base": "Reference",
+"class": "PartialClubMember",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/entity/PartialClubMember.gd"
+}, {
+"base": "Reference",
+"class": "PartialInvite",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/entity/PartialInvite.gd"
+}, {
+"base": "Reference",
+"class": "PartialItem",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/entity/PartialItem.gd"
+}, {
+"base": "Reference",
+"class": "PartialUser",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/entity/PartialUser.gd"
+}, {
+"base": "Reference",
+"class": "PartialUserAward",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/entity/PartialUserAward.gd"
+}, {
+"base": "Reference",
+"class": "Token",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/entity/Token.gd"
+}, {
+"base": "Reference",
+"class": "Transaction",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/entity/Transaction.gd"
+}, {
+"base": "Reference",
+"class": "User",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/entity/User.gd"
+}, {
+"base": "Reference",
+"class": "UserAward",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/entity/UserAward.gd"
+}, {
+"base": "Reference",
+"class": "UserPermissions",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/entity/UserPermissions.gd"
+} ]
+_global_script_class_icons={
+"AuthorizeParams": "",
+"Award": "",
+"ChangePermissionsParams": "",
+"Club": "",
+"ClubMember": "",
+"ClubSlots": "",
+"CreateAwardParams": "",
+"CreateClubParams": "",
+"CreateInviteParams": "",
+"CreateItemParams": "",
+"CreateMemberParams": "",
+"CreateTransactionParams": "",
+"CreateUserParams": "",
+"GiveAwardParams": "",
+"HTTPResponse": "",
+"Invite": "",
+"Item": "",
+"JoinClubParams": "",
+"ModifyAwardParams": "",
+"ModifyClubParams": "",
+"ModifyItemParams": "",
+"ModifyMemberParams": "",
+"ModifyMemberSlotsParams": "",
+"ModifyUserParams": "",
+"PCFClient": "",
+"PCFMetadata": "",
+"PCFUtils": "",
+"PartialAward": "",
+"PartialClub": "",
+"PartialClubMember": "",
+"PartialInvite": "",
+"PartialItem": "",
+"PartialUser": "",
+"PartialUserAward": "",
+"Token": "",
+"Transaction": "",
+"User": "",
+"UserAward": "",
+"UserPermissions": ""
+}
+
+[application]
+
+config/name="Pro Clubs Federation API Wrapper"
+run/main_scene="res://Example.tscn"
+config/icon="res://icon.png"
+
+[autoload]
+
+Env="*res://Env.gd"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "res://addons/proclubsfederation-api-godot/plugin.cfg" )
+
+[physics]
+
+common/enable_pause_aware_picking=true
+
+[rendering]
+
+quality/driver/driver_name="GLES2"
+vram_compression/import_etc=true
+vram_compression/import_etc2=false
+environment/default_environment="res://default_env.tres"
