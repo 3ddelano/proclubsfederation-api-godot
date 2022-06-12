@@ -6,8 +6,46 @@
 class_name PCFWSClient
 extends Node
 
-signal client_ready()
-signal club_create()
+# -- ws --
+signal client_ready(user)
+signal client_resumed()
+
+# -- clubs --
+signal club_create(club)
+signal club_update(club)
+signal club_delete(club)
+
+# -- clubs members --
+signal club_member_create(club_member)
+signal club_member_update(club_member)
+signal club_member_delete(club_member)
+
+# -- awards --
+signal award_create(award)
+signal award_update(award)
+signal award_delete(award)
+
+# -- items --
+signal item_create(item)
+signal item_update(item)
+signal item_delete(item)
+
+# -- transactions --
+signal transaction_create(item)
+
+# -- users --
+signal users_update(item)
+
+# -- user awards --
+signal user_award_create(user_award)
+signal user_award_update(user_award)
+signal user_award_delete(user_award)
+
+# -- invites --
+signal invite_create(invite)
+signal invite_update(invite)
+signal invite_delete(invite)
+
 
 var debug = false
 var _wss_url: String
@@ -27,6 +65,9 @@ func _init() -> void:
 
 func _ready():
 	update_url()
+
+func get_session_id():
+	return session_id
 
 func update_url():
 	if debug:
@@ -123,13 +164,76 @@ func _get_json() -> Dictionary:
 func _handle_event(data: Dictionary):
 	var event_name = data.t
 	match event_name:
+	# -- ws --
 		"READY":
 			var user = PartialUser.new().from_json(data.d.user)
 			emit_signal("client_ready", user)
 			session_id = data.d.session_id
+		
+		"RESUMED":
+			pass # not implemented in api (planned)
+	
+	# -- clubs --
 		"CLUB_CREATE":
 			var club = PartialClub.new().from_json(data.d)
 			emit_signal("club_create", club)
+		"CLUB_UPDATE":
+			var club = PartialClub.new().from_json(data.d)
+			emit_signal("club_update", club)
+		"CLUB_DELETE":
+			var club = PartialClub.new().from_json(data.d)
+			emit_signal("club_delete", club)
+	# -- club members --
+		"CLUB_MEMBER_CREATE":
+			var club_member = PartialClubMember.new().from_json(data.d)
+			emit_signal("club_member_create", club_member)
+		"CLUB_MEMBER_UPDATE":
+			var club_member = PartialClubMember.new().from_json(data.d)
+			emit_signal("club_member_update", club_member)
+		"CLUB_MEMBER_DELETE":
+			var club_member = PartialClubMember.new().from_json(data.d)
+			emit_signal("club_member_delete", club_member)
+	
+	# -- awards --
+		"AWARD_CREATE":
+			var award = PartialAward.new().from_json(data.d)
+			emit_signal("award_create", award)
+		"AWARD_UPDATE":
+			var award = PartialAward.new().from_json(data.d)
+			emit_signal("award_update", award)
+		"AWARD_DELETE":
+			var award = PartialAward.new().from_json(data.d)
+			emit_signal("award_delete", award)
+	
+	# -- users --
+		"USER_UPDATE":
+			var user = PartialUser.new().from_json(data.d)
+			emit_signal("user_update", user)
+	
+	# -- user awards --
+		"USER_AWARD_CREATE":
+			var user_award = PartialUserAward.new().from_json(data.d)
+			emit_signal("user_award_create", user_award)
+		"USER_AWARD_DELETE":
+			var user_award = PartialUserAward.new().from_json(data.d)
+			emit_signal("user_award_delete", user_award)
+	
+	# -- transactions --
+		"TRANSACTION_CREATE":
+			var transaction = Transaction.new().from_json(data.d)
+			emit_signal("transaction_create", transaction)
+	
+	# -- items --
+		"ITEM_CREATE":
+			var item = PartialItem.new().from_json(data.d)
+			emit_signal("item_create", item)
+		"ITEM_UPDATE":
+			var item = PartialItem.new().from_json(data.d)
+			emit_signal("item_update", item)
+		"ITEM_DELETE":
+			var item = PartialItem.new().from_json(data.d)
+			emit_signal("item_delete", item)
+	
 
 func get_class() -> String:
 	return "PCFWSClient"
