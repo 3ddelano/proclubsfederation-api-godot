@@ -1,8 +1,9 @@
-# Copyright 2022 Delano Lourenco
+
+# Copyright 2022 Delano Lourenco, Sairam Mangeshkar
 # MIT LICENSE
 # https://github.com/3ddelano/proclubsfederation-api-godot
 
-class_name PCFWebsocketClient
+class_name PCFWSClient
 extends Node
 
 signal client_ready()

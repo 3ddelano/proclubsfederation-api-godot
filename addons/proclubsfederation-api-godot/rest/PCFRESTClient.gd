@@ -2,7 +2,7 @@
 # MIT LICENSE
 # https://github.com/3ddelano/proclubsfederation-api-godot
 
-class_name PCFHTTPClient
+class_name PCFRESTClient
 extends Node
 
 func set_token(token: Token) -> void:
