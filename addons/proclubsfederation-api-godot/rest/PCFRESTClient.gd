@@ -2,7 +2,7 @@
 # MIT LICENSE
 # https://github.com/3ddelano/proclubsfederation-api-godot
 
-class_name PCFHTTPClient
+class_name PCFRESTClient
 extends Node
 
 func set_token(token: Token) -> void:
@@ -399,7 +399,7 @@ const ENDPOINTS: Dictionary = {
 	REVOKE = "/auth/revoke/",
 }
 
-var debug = true
+var debug = false
 var _base_url: String
 var _auth_header = ""
 var _headers = [
@@ -407,17 +407,22 @@ var _headers = [
 ]
 
 func _init() -> void:
-	name = "PCFClient"
+	name = "PCFRESTClient"
 	pause_mode = PAUSE_MODE_PROCESS
 
 func _ready() -> void:
+	update_url()
+
+func update_url():
 	if debug:
 		_base_url = PCFMetadata.REST_URL_LOCAL
 	else:
 		_base_url = PCFMetadata.REST_URL % PCFMetadata.REST_VERSION
 
+	
+
 func get_class() -> String:
-	return "PCFClient"
+	return "PCFRESTClient"
 
 func _to_string() -> String:
 	return "[%s:%d]" % [self.get_class(), self.get_instance_id()]

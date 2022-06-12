@@ -1,14 +1,15 @@
-# Copyright 2022 Delano Lourenco
+
+# Copyright 2022 Delano Lourenco, Sairam Mangeshkar
 # MIT LICENSE
 # https://github.com/3ddelano/proclubsfederation-api-godot
 
-class_name PCFWebsocketClient
+class_name PCFWSClient
 extends Node
 
 signal client_ready()
-signal club_created()
+signal club_create()
 
-var debug = true
+var debug = false
 var _wss_url: String
 var _logged_in
 var session_id
@@ -19,15 +20,32 @@ var _token: Token
 var heartbeat_timer: Timer
 var heartbeat_seq_num: int = -1
 
+
+func _init() -> void:
+	name = "PCFWSClient"
+	pause_mode = PAUSE_MODE_PROCESS
+
 func _ready():
+	update_url()
+
+func update_url():
 	if debug:
 		_wss_url = PCFMetadata.GATEWAY_URL_LOCAL
 	else:
 		_wss_url = PCFMetadata.GATEWAY_URL % PCFMetadata.GATEWAY_VERSION
+	
+	if _client:
+		_disconnect_ws()
 	_init_wss()
 
 func set_token(token: Token):
 	_token = token
+
+func _disconnect_ws():
+	_client.disconnect_from_host()
+	_client = null
+	heartbeat_timer.stop()
+	remove_child(heartbeat_timer)
 
 func _init_wss():
 	_client = WebSocketClient.new()
@@ -49,14 +67,10 @@ func _data_received():
 	match op:
 		10: # Hello
 			heartbeat_timer.start((data.d.heartbeat_interval/1000)/16)
-			print(!heartbeat_timer.is_stopped())
-			print("received HELLO OP: 10")
 			_send_identify()
 		11: # HB ACK
-			print("HB ACK")
 			heartbeat_seq_num = int(data.s)
 		0:
-			print("received event")
 			_handle_event(data)
 		
 			
@@ -66,6 +80,8 @@ func _connection_established(protocol):
 
 func _connection_closed(was_cleanly_closed):
 	print("Connection closed. Cleanly?: %s" % was_cleanly_closed)
+	heartbeat_timer.stop()
+	remove_child(heartbeat_timer)
 
 func _process(_delta):
 	var is_connected = (
@@ -76,7 +92,6 @@ func _process(_delta):
 		_client.poll()
 
 func _send_heartbeat():
-	print("sending heartbeat")
 	var seq_num
 	if heartbeat_seq_num == -1:
 		seq_num = null
@@ -89,7 +104,6 @@ func _send_heartbeat():
 	_send_json(payload)
 
 func _send_identify():
-	print("sending identify")
 	var payload = {
 		'op': 2,
 		'd': {
@@ -100,7 +114,6 @@ func _send_identify():
 
 func _send_json(payload: Dictionary):
 	var json = to_json(payload)
-	print(json)
 	_client.get_peer(1).put_packet(json.to_utf8())
 
 func _get_json() -> Dictionary:
@@ -116,4 +129,10 @@ func _handle_event(data: Dictionary):
 			session_id = data.d.session_id
 		"CLUB_CREATE":
 			var club = PartialClub.new().from_json(data.d)
-			emit_signal("club_created", club)
+			emit_signal("club_create", club)
+
+func get_class() -> String:
+	return "PCFWSClient"
+
+func _to_string() -> String:
+	return "[%s:%d]" % [self.get_class(), self.get_instance_id()]
