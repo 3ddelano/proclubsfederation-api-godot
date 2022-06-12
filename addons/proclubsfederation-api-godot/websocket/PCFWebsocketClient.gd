@@ -112,3 +112,4 @@ func _handle_event(data: Dictionary):
 			session_id = data.d.session_id
 		"CLUB_CREATE":
 			var club = PartialClub.new().from_json(data.d)
+			emit_signal("club_created", club)

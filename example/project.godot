@@ -130,6 +130,11 @@ _global_script_classes=[ {
 "path": "res://addons/proclubsfederation-api-godot/rest/param_entity/ModifyUserParams.gd"
 }, {
 "base": "Node",
+"class": "PCFClient",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/PCFClient.gd"
+}, {
+"base": "Node",
 "class": "PCFHTTPClient",
 "language": "GDScript",
 "path": "res://addons/proclubsfederation-api-godot/PCFHTTPClient.gd"
@@ -234,6 +239,7 @@ _global_script_class_icons={
 "ModifyMemberParams": "",
 "ModifyMemberSlotsParams": "",
 "ModifyUserParams": "",
+"PCFClient": "",
 "PCFHTTPClient": "",
 "PCFMetadata": "",
 "PCFUtils": "",
