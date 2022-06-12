@@ -5,7 +5,7 @@
 class_name PCFHTTPClient
 extends Node
 
-func set_auth(token: Token) -> void:
+func set_token(token: Token) -> void:
 	_auth_header = "Authorization: Bearer %s" % token.access_token
 
 func get_clubs() -> Array:

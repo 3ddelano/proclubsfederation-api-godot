@@ -15,7 +15,7 @@ func _ready() -> void:
 	var token = Token.new().from_json({
 		access_token = Env.get_var("ACCESS_TOKEN")
 	})
-	http_client.set_auth(token)
+	http_client.set_token(token)
 	ws_client.set_token(token)
 
 

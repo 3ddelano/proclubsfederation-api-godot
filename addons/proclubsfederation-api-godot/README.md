@@ -50,7 +50,7 @@ func _ready():
 	var token = Token.new().from_json({
 		access_token = "xxxxx_access_token_here_xxxxx"
 	})
-	client.set_auth(token)
+	client.set_token(token)
 
 	var user: User = yield(client.get_current_user(), "completed")
 	print(user)
@@ -69,7 +69,7 @@ func _ready():
 	var token = Token.new().from_json({
 		access_token = "xxxxx_access_token_here_xxxxx"
 	})
-	http_client.set_auth(token)
+	http_client.set_token(token)
 	ws_client.set_token(token)
 	ws_client.connect("client_ready", self, "_client_ready")
 
