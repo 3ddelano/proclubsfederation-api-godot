@@ -130,9 +130,9 @@ _global_script_classes=[ {
 "path": "res://addons/proclubsfederation-api-godot/rest/param_entity/ModifyUserParams.gd"
 }, {
 "base": "Node",
-"class": "PCFClient",
+"class": "PCFHTTPClient",
 "language": "GDScript",
-"path": "res://addons/proclubsfederation-api-godot/PCFClient.gd"
+"path": "res://addons/proclubsfederation-api-godot/PCFHTTPClient.gd"
 }, {
 "base": "Reference",
 "class": "PCFMetadata",
@@ -143,6 +143,11 @@ _global_script_classes=[ {
 "class": "PCFUtils",
 "language": "GDScript",
 "path": "res://addons/proclubsfederation-api-godot/PCFUtils.gd"
+}, {
+"base": "Node",
+"class": "PCFWebsocketClient",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/websocket/PCFWebsocketClient.gd"
 }, {
 "base": "Reference",
 "class": "PartialAward",
@@ -229,9 +234,10 @@ _global_script_class_icons={
 "ModifyMemberParams": "",
 "ModifyMemberSlotsParams": "",
 "ModifyUserParams": "",
-"PCFClient": "",
+"PCFHTTPClient": "",
 "PCFMetadata": "",
 "PCFUtils": "",
+"PCFWebsocketClient": "",
 "PartialAward": "",
 "PartialClub": "",
 "PartialClubMember": "",
@@ -269,4 +275,3 @@ common/enable_pause_aware_picking=true
 quality/driver/driver_name="GLES2"
 vram_compression/import_etc=true
 vram_compression/import_etc2=false
-environment/default_environment="res://default_env.tres"
