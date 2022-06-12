@@ -32,7 +32,7 @@ func _ready():
 	var client: PCFClient = PCFClient.new()
 	add_child(client)
 
-	var clubs = yield(client.get_clubs(), "completed")
+	var clubs = yield(client.get_rest_client().get_clubs(), "completed")
 	print(clubs)
 ```
 
@@ -49,9 +49,31 @@ func _ready():
 	var token = Token.new().from_json({
 		access_token = "xxxxx_access_token_here_xxxxx"
 	})
-	client.set_auth(token)
+	client.set_token(token)
 
-	var user: User = yield(client.get_current_user(), "completed")
+	var user: User = yield(client.get_rest_client().get_current_user(), "completed")
+	print(user)
+```
+
+Example with websockets and authentication:
+```GDScript
+extends Node
+
+func _ready():
+	var client: PCFClient = PCFClient.new()
+	add_child(client)
+	
+	var token = Token.new().from_json({
+		access_token = "xxxxx_access_token_here_xxxxx"
+	})
+	
+	client.set_token(token)
+	client.get_ws_client().connect("client_ready", self, "_client_ready")
+	var user: User = yield(client.get_rest_client().get_current_user(), "completed")
+	print(user)
+
+func _client_ready(user: PartialUser):
+	print("Ready!")
 	print(user)
 ```
 
