@@ -1,6 +1,6 @@
 # Copyright 2022 Delano Lourenco, Sairam Mangeshkar
 # MIT LICENSE
-# rests://github.com/3ddelano/proclubsfederation-api-godot
+# https://github.com/3ddelano/proclubsfederation-api-godot
 
 class_name PCFClient
 extends Node
