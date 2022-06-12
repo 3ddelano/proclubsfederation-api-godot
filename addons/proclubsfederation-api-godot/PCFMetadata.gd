@@ -9,7 +9,7 @@ extends Reference
 const REST_URL: String = "https://api.proclubsfederation.com/v%d"
 const REST_VERSION: int = 2
 const GATEWAY_URL: String = "wss://gateway.proclubsfederation.com/v%d"
-const GATEWAY_VERSION: int = 2
+const GATEWAY_VERSION: int = 1
 
 
 const REST_URL_LOCAL: String = "http://127.0.0.1:8000"

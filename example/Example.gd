@@ -7,6 +7,7 @@ func _ready() -> void:
 #	print("Ready!")
 	client = PCFClient.new()
 	add_child(client)
+	client.set_debug(false)
 
 	var token = Token.new().from_json({
 		access_token = Env.get_var("ACCESS_TOKEN")
@@ -14,6 +15,8 @@ func _ready() -> void:
 	client.set_token(token)
 	
 	client.get_ws_client().connect("client_ready", self, "_client_ready")
+	client.get_ws_client().connect("club_create", self, "_club_create")
+	
 	var rest_client = client.get_rest_client()
 	
 #	var create_club_params = CreateClubParams.new()
@@ -75,3 +78,6 @@ func _on_req_complete(data):
 func _client_ready(user: PartialUser):
 	print("Ready!")
 	print(user)
+
+func _club_create(club: PartialClub):
+	print(club)

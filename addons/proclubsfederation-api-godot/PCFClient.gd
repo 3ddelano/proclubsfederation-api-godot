@@ -9,6 +9,13 @@ func set_token(token: Token) -> void:
 	_rest_client.set_token(token)
 	_ws_client.set_token(token)
 
+func set_debug(_debug: bool):
+	_rest_client.debug = _debug
+	_ws_client.debug = _debug
+	
+	_rest_client.update_url()
+	_ws_client.update_url()
+
 var _rest_client: PCFRESTClient
 var _ws_client: PCFWSClient
 
