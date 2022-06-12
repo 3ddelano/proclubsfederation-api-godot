@@ -26,7 +26,7 @@ func from_json(json: Dictionary) -> User:
 		clubs.append(PartialClub.new().from_json(club_data))
 	owned_clubs = []
 	for owned_club_data in json["owned_clubs"]:
-		owned_clubs =.append(PartialClub.new().from_json(owned_club_data))
+		owned_clubs.append(PartialClub.new().from_json(owned_club_data))
 	invites = []
 	for invite_data in json["invites"]:
 		invites.append(PartialInvite.new().from_json(invite_data))
