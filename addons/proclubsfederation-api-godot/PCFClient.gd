@@ -12,9 +12,16 @@ func set_token(token: Token) -> void:
 func set_debug(_debug: bool):
 	_rest_client.debug = _debug
 	_ws_client.debug = _debug
-	
+
 	_rest_client.update_url()
 	_ws_client.update_url()
+
+func get_ws_client() -> PCFWSClient:
+	return _ws_client
+
+func get_rest_client() -> PCFRESTClient:
+	return _rest_client
+
 
 var _rest_client: PCFRESTClient
 var _ws_client: PCFWSClient
@@ -26,15 +33,9 @@ func _init() -> void:
 func _ready() -> void:
 	_rest_client = PCFRESTClient.new()
 	_ws_client = PCFWSClient.new()
-	
+
 	add_child(_rest_client)
 	add_child(_ws_client)
-
-func get_ws_client() -> PCFWSClient:
-	return _ws_client
-
-func get_rest_client() -> PCFRESTClient:
-	return _rest_client
 
 func get_class() -> String:
 	return "PCFClient"

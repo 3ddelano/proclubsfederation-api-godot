@@ -22,6 +22,9 @@ func is_validation_error():
 func is_unauthorized_error():
 	return response_code == 401 and result == OK
 
+func is_internal_server_error():
+	return response_code == 500 and result == OK
+
 func is_error():
 	return response_code < 200 or response_code > 299 or result != OK
 
@@ -39,15 +42,18 @@ func _to_string() -> String:
 	if is_validation_error():
 		return "HTTPResponse::ValidationError(" +  JSON.print(parse_json(body_str)["detail"], "\t") + ")"
 
-	if is_not_found_error():
+	elif is_not_found_error():
 		return "HTTPResponse::NotFoundError(" +  JSON.print(parse_json(body_str)["detail"], "\t") + ")"
 
-	if is_unauthorized_error():
+	elif is_unauthorized_error():
 		var json = parse_json(body_str)
 		var ret = json
 		if "detail" in json:
 			ret = json["detail"]
 		return "HTTPResponse::UnauthorizedError(" +  JSON.print(ret, "\t") + ")"
+
+	elif is_internal_server_error():
+		return "HTTPResponse::InternalServerError()"
 
 	return "HTTPResponse(result=%s, response_code=%s, headers=%s, body=%s)" % [result, response_code, headers, body.get_string_from_utf8()]
 
