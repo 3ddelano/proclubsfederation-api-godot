@@ -47,12 +47,36 @@ signal invite_update(invite)
 signal invite_delete(invite)
 
 
+func init():
+	_enabled = true
+	update_url()
+
+func get_session_id():
+	return session_id
+
+func set_token(token: Token):
+	_token = token
+
+func update_url():
+	if debug:
+		_wss_url = PCFMetadata.GATEWAY_URL_LOCAL
+	else:
+		_wss_url = PCFMetadata.GATEWAY_URL % PCFMetadata.GATEWAY_VERSION
+
+	if _client:
+		_disconnect_ws()
+
+	if _enabled:
+		_init_wss()
+
+
 var debug = false
+var _enabled = false
 var _wss_url: String
 var _logged_in
 var session_id
 
-var _client: WebSocketClient
+var _client: WebSocketClient = null
 var _token: Token
 
 var heartbeat_timer: Timer
@@ -62,25 +86,6 @@ var heartbeat_seq_num: int = -1
 func _init() -> void:
 	name = "PCFWSClient"
 	pause_mode = PAUSE_MODE_PROCESS
-
-func _ready():
-	update_url()
-
-func get_session_id():
-	return session_id
-
-func update_url():
-	if debug:
-		_wss_url = PCFMetadata.GATEWAY_URL_LOCAL
-	else:
-		_wss_url = PCFMetadata.GATEWAY_URL % PCFMetadata.GATEWAY_VERSION
-	
-	if _client:
-		_disconnect_ws()
-	_init_wss()
-
-func set_token(token: Token):
-	_token = token
 
 func _disconnect_ws():
 	_client.disconnect_from_host()
@@ -93,7 +98,7 @@ func _init_wss():
 	_client.connect("connection_established", self, "_connection_established")
 	_client.connect("connection_closed", self, "_connection_closed")
 	_client.connect("data_received", self, "_data_received")
-	
+
 	_client.connect_to_url(_wss_url)
 	_create_timers()
 
@@ -113,30 +118,28 @@ func _data_received():
 			heartbeat_seq_num = int(data.s)
 		0:
 			_handle_event(data)
-		
-			
+
 func _connection_established(protocol):
 	_client.get_peer(1).set_write_mode(WebSocketPeer.WRITE_MODE_TEXT)
-	print("Connection established with protocol: %s" % protocol)
 
 func _connection_closed(was_cleanly_closed):
-	print("Connection closed. Cleanly?: %s" % was_cleanly_closed)
 	heartbeat_timer.stop()
 	remove_child(heartbeat_timer)
 
 func _process(_delta):
-	var is_connected = (
-		_client.get_connection_status()
-		!= NetworkedMultiplayerPeer.CONNECTION_DISCONNECTED
-	)
-	if is_connected:
-		_client.poll()
+	if _client:
+		var is_connected = (
+			_client.get_connection_status()
+			!= NetworkedMultiplayerPeer.CONNECTION_DISCONNECTED
+		)
+		if is_connected:
+			_client.poll()
 
 func _send_heartbeat():
 	var seq_num
 	if heartbeat_seq_num == -1:
 		seq_num = null
-	else: 
+	else:
 		seq_num = heartbeat_seq_num
 	var payload = {
 		'op': 1,
@@ -169,10 +172,10 @@ func _handle_event(data: Dictionary):
 			var user = PartialUser.new().from_json(data.d.user)
 			emit_signal("client_ready", user)
 			session_id = data.d.session_id
-		
+
 		"RESUMED":
 			pass # not implemented in api (planned)
-	
+
 	# -- clubs --
 		"CLUB_CREATE":
 			var club = PartialClub.new().from_json(data.d)
@@ -193,7 +196,7 @@ func _handle_event(data: Dictionary):
 		"CLUB_MEMBER_DELETE":
 			var club_member = PartialClubMember.new().from_json(data.d)
 			emit_signal("club_member_delete", club_member)
-	
+
 	# -- awards --
 		"AWARD_CREATE":
 			var award = PartialAward.new().from_json(data.d)
@@ -204,12 +207,12 @@ func _handle_event(data: Dictionary):
 		"AWARD_DELETE":
 			var award = PartialAward.new().from_json(data.d)
 			emit_signal("award_delete", award)
-	
+
 	# -- users --
 		"USER_UPDATE":
 			var user = PartialUser.new().from_json(data.d)
 			emit_signal("user_update", user)
-	
+
 	# -- user awards --
 		"USER_AWARD_CREATE":
 			var user_award = PartialUserAward.new().from_json(data.d)
@@ -217,12 +220,12 @@ func _handle_event(data: Dictionary):
 		"USER_AWARD_DELETE":
 			var user_award = PartialUserAward.new().from_json(data.d)
 			emit_signal("user_award_delete", user_award)
-	
+
 	# -- transactions --
 		"TRANSACTION_CREATE":
 			var transaction = Transaction.new().from_json(data.d)
 			emit_signal("transaction_create", transaction)
-	
+
 	# -- items --
 		"ITEM_CREATE":
 			var item = PartialItem.new().from_json(data.d)
@@ -233,7 +236,6 @@ func _handle_event(data: Dictionary):
 		"ITEM_DELETE":
 			var item = PartialItem.new().from_json(data.d)
 			emit_signal("item_delete", item)
-	
 
 func get_class() -> String:
 	return "PCFWSClient"

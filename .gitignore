@@ -1,4 +1,12 @@
 .env
-*.import
 logs/
 proclubsfederation-api-godot.v*.zip
+
+.import/
+default_env.tres
+icon.png.import
+
+ReferenceCollectorCLI.gd
+Collector.gd
+reference.json
+__pycache__

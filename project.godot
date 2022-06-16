@@ -10,6 +10,11 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "Reference",
+"class": "Application",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/entity/Application.gd"
+}, {
+"base": "Reference",
 "class": "AuthorizeParams",
 "language": "GDScript",
 "path": "res://addons/proclubsfederation-api-godot/rest/param_entity/AuthorizeParams.gd"
@@ -38,6 +43,11 @@ _global_script_classes=[ {
 "class": "ClubSlots",
 "language": "GDScript",
 "path": "res://addons/proclubsfederation-api-godot/entity/ClubSlots.gd"
+}, {
+"base": "Reference",
+"class": "CreateApplicationParams",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/rest/param_entity/CreateApplicationParams.gd"
 }, {
 "base": "Reference",
 "class": "CreateAwardParams",
@@ -155,6 +165,11 @@ _global_script_classes=[ {
 "path": "res://addons/proclubsfederation-api-godot/websocket/PCFWSClient.gd"
 }, {
 "base": "Reference",
+"class": "PartialApplication",
+"language": "GDScript",
+"path": "res://addons/proclubsfederation-api-godot/entity/PartialApplication.gd"
+}, {
+"base": "Reference",
 "class": "PartialAward",
 "language": "GDScript",
 "path": "res://addons/proclubsfederation-api-godot/entity/PartialAward.gd"
@@ -215,12 +230,14 @@ _global_script_classes=[ {
 "path": "res://addons/proclubsfederation-api-godot/entity/UserPermissions.gd"
 } ]
 _global_script_class_icons={
+"Application": "",
 "AuthorizeParams": "",
 "Award": "",
 "ChangePermissionsParams": "",
 "Club": "",
 "ClubMember": "",
 "ClubSlots": "",
+"CreateApplicationParams": "",
 "CreateAwardParams": "",
 "CreateClubParams": "",
 "CreateInviteParams": "",
@@ -244,6 +261,7 @@ _global_script_class_icons={
 "PCFRESTClient": "",
 "PCFUtils": "",
 "PCFWSClient": "",
+"PartialApplication": "",
 "PartialAward": "",
 "PartialClub": "",
 "PartialClubMember": "",
@@ -261,12 +279,12 @@ _global_script_class_icons={
 [application]
 
 config/name="Pro Clubs Federation API Wrapper"
-run/main_scene="res://Example.tscn"
+run/main_scene="res://example/Example.tscn"
 config/icon="res://icon.png"
 
 [autoload]
 
-Env="*res://Env.gd"
+Env="*res://example/Env.gd"
 
 [editor_plugins]
 
