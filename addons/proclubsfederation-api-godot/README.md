@@ -14,6 +14,8 @@ Features
 - Async using yield()
 - REST + Websockets
 
+> Note: Call the PCFWSClient.init() method to start the websocket connection
+
 Installation
 --------------
 
@@ -68,6 +70,7 @@ func _ready():
 	client.set_token(token)
 
 	var ws_client: PCFWSClient = client.get_ws_client()
+	ws_client.init() # Starts the websocket connection 
 	ws_client.connect("client_ready", self, "_on_client_ready")
 	ws_client.connect("club_create", self, "_on_club_create")
 
