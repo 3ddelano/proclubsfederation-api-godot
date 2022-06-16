@@ -6,16 +6,16 @@ class_name CreateApplicationParams
 extends Reference
 var description: String
 var application_type: String
+var club_id: String
 var applicant_id = null # String
-var club_id = null # String
 
 func to_dict() -> Dictionary:
 	var json = {
 		description = description,
 		application_type = application_type,
+		club_id = club_id,
 	}
 	PCFUtils.set_if_not_null(json, "applicant_id", applicant_id)
-	PCFUtils.set_if_not_null(json, "club_id", club_id)
 	return json
 
 func get_class() -> String:

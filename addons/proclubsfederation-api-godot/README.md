@@ -2,7 +2,7 @@ Pro Clubs Federation API Godot
 =========================================
 
 ### Interact with the Pro Clubs Federation API from GDScript!
-
+<img src="https://raw.githubusercontent.com/3ddelano/proclubsfederation-api-godot/main/icon.png" height="250px">
 <br>
 <img alt="Godot3" src="https://img.shields.io/badge/-Godot 3.3+-478CBF?style=for-the-badge&logo=godotengine&logoWidth=20&logoColor=white" />
 
@@ -11,8 +11,8 @@ Features
 
 - Statically typed
 - Error handling via HTTPResponse
-- Uses Async/Await
-- Supports Websockets (Basic)
+- Async using yield()
+- REST + Websockets
 
 Installation
 --------------
@@ -25,71 +25,57 @@ Getting Started
 
 A basic example is given below:
 
-
 ```GDScript
 extends Node
 
 func _ready():
-	var client: PCFClient = PCFHTTPClient.new()
+	var client: PCFClient = PCFClient.new()
 	add_child(client)
 
-	var clubs = yield(client.get_clubs(), "completed")
+	var clubs = yield(client.get_rest_client().get_clubs(), "completed")
 	print(clubs)
 ```
 
 An example with authentication:
 
-
 ```GDScript
 extends Node
 
 func _ready():
-	var client: PCFClient = PCFHTTPClient.new()
+	var client: PCFClient = PCFClient.new()
 	add_child(client)
 
-	var token = Token.new().from_json({
-		access_token = "xxxxx_access_token_here_xxxxx"
-	})
+	var token = Token.new()
+	token.access_token = "xxxxx_access_token_here_xxxxx"
 	client.set_token(token)
 
-	var user: User = yield(client.get_current_user(), "completed")
+	var rest_client: PCFRESTClient = client.get_rest_client()
+	var user: User = yield(rest_client.get_current_user(), "completed")
 	print(user)
 ```
 
-Example with websockets and authentication:
+An example with websockets:
+
 ```GDScript
 extends Node
 
 func _ready():
-	var http_client: PCFClient = PCFHTTPClient.new()
-	var ws_client: PCFWebsocketClinet = PCFWebsocketClient.new()
-	add_child(http_client)
-	add_child(ws_client)
+	var client: PCFClient = PCFClient.new()
+	add_child(client)
+	
+	var token = Token.new()
+	token.access_token = "xxxxx_access_token_here_xxxxx"
+	client.set_token(token)
 
-	var token = Token.new().from_json({
-		access_token = "xxxxx_access_token_here_xxxxx"
-	})
-	http_client.set_token(token)
-	ws_client.set_token(token)
-	ws_client.connect("client_ready", self, "_client_ready")
+	var ws_client: PCFWSClient = client.get_ws_client()
+	ws_client.connect("client_ready", self, "_on_client_ready")
+	ws_client.connect("club_create", self, "_on_club_create")
 
-	var user: User = yield(client.get_current_user(), "completed")
-	print(user)
+func _on_client_ready(user: PartialUser):
+	print("Client ready: ", user)
 
-func _client_ready(user: PartialUser):
-	print("Ready!")
-	print(user)
-```
-
-Contributing
------------
-
-This plugin is a non-profit project developed by voluntary contributors.
-
-### Supporters
-
-```
-None, you can be the first one!
+func _on_club_create(club: PartialClub):
+	print("Club create: ", club)
 ```
 
 Support the project development

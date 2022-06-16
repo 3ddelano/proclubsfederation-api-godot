@@ -9,38 +9,15 @@ func _ready() -> void:
 	add_child(client)
 	client.set_debug(false)
 
-	var token = Token.new().from_json({access_token = Env.get_var("ACCESS_TOKEN")})
+	var token = Token.new()
+	token.access_token = Env.get_var("ACCESS_TOKEN")
 	client.set_token(token)
 
 	var rest_client = client.get_rest_client()
-	var ws_client = client.get_ws_client()
-	ws_client.init()
-
-	ws_client.connect("client_ready", self, "_client_ready")
-	ws_client.connect("client_resumed", self, "_client_resumed")
-	ws_client.connect("club_create", self, "_club_create")
-	ws_client.connect("club_update", self, "_on_club_update")
-	ws_client.connect("club_delete", self, "_on_club_delete")
-	ws_client.connect("club_member_create", self, "_on_club_member_create")
-	ws_client.connect("club_member_update", self, "_on_club_member_update")
-	ws_client.connect("club_member_delete", self, "_on_club_member_delete")
-	ws_client.connect("award_create", self, "_on_award_create")
-	ws_client.connect("award_update", self, "_on_award_update")
-	ws_client.connect("award_delete", self, "_on_award_delete")
-	ws_client.connect("item_create", self, "_on_item_create")
-	ws_client.connect("item_update", self, "_on_item_update")
-	ws_client.connect("item_delete", self, "_on_item_delete")
-	ws_client.connect("transaction_create", self, "_on_transaction_create")
-	ws_client.connect("users_update", self, "_on_users_update")
-	ws_client.connect("user_award_create", self, "_on_user_award_create")
-	ws_client.connect("user_award_update", self, "_on_user_award_update")
-	ws_client.connect("user_award_delete", self, "_on_user_award_delete")
-	ws_client.connect("invite_create", self, "_on_invite_create")
-	ws_client.connect("invite_update", self, "_on_invite_update")
-	ws_client.connect("invite_delete", self, "_on_invite_delete")
+	_setup_ws_client()
 
 #	var create_club_params = CreateClubParams.new()
-#	create_club_params.name = "Club to Delete"
+#	create_club_params.name = "Test club 007"
 #	create_club_params.description = "Test description"
 #	res = yield(rest_client.create_club(create_club_params), "completed")
 
@@ -51,7 +28,7 @@ func _ready() -> void:
 #	res = yield(rest_client.modify_club("34882886260117504", modify_club_params), "completed")
 
 #	res = yield(rest_client.get_clubs(), "completed")
-#	res = yield(rest_client.get_club("34881100694585344"), "completed")
+#	res = yield(rest_client.get_club("31032476856385536"), "completed")
 #	res = yield(rest_client.delete_club("34881100694585344"), "completed")
 
 #	res = yield(rest_client.get_members("31032476856385536"), "completed")
@@ -88,23 +65,49 @@ func _ready() -> void:
 
 #	yield(rest_client.revoke(), "completed")
 
-	var create_application_params = CreateApplicationParams.new()
-	create_application_params.description = "test app"
-	create_application_params.application_type = "club_application"
-	res = yield(rest_client.create_application(create_application_params), "completed")
+#	var create_application_params = CreateApplicationParams.new()
+#	create_application_params.description = "test app"
+#	create_application_params.application_type = "club_application"
+#	create_application_params.club_id = "31032476856385536"
+#	res = yield(rest_client.create_application(create_application_params), "completed")
 
 #	res = yield(rest_client.get_applications(), "completed")
-#	res = yield(rest_client.get_application("38173488451698688"), "completed")
+#	res = yield(rest_client.get_application("38893517443174400"), "completed")
 
 	print(res)
 
 
 # --- ws ---
+func _setup_ws_client():
+	var ws_client = client.get_ws_client()
+	ws_client.init()
+	ws_client.connect("client_ready", self, "_on_client_ready")
+	ws_client.connect("client_resumed", self, "_on_client_resumed")
+	ws_client.connect("club_create", self, "_on_club_create")
+	ws_client.connect("club_update", self, "_on_club_update")
+	ws_client.connect("club_delete", self, "_on_club_delete")
+	ws_client.connect("club_member_create", self, "_on_club_member_create")
+	ws_client.connect("club_member_update", self, "_on_club_member_update")
+	ws_client.connect("club_member_delete", self, "_on_club_member_delete")
+	ws_client.connect("award_create", self, "_on_award_create")
+	ws_client.connect("award_update", self, "_on_award_update")
+	ws_client.connect("award_delete", self, "_on_award_delete")
+	ws_client.connect("item_create", self, "_on_item_create")
+	ws_client.connect("item_update", self, "_on_item_update")
+	ws_client.connect("item_delete", self, "_on_item_delete")
+	ws_client.connect("transaction_create", self, "_on_transaction_create")
+	ws_client.connect("users_update", self, "_on_users_update")
+	ws_client.connect("user_award_create", self, "_on_user_award_create")
+	ws_client.connect("user_award_update", self, "_on_user_award_update")
+	ws_client.connect("user_award_delete", self, "_on_user_award_delete")
+	ws_client.connect("invite_create", self, "_on_invite_create")
+	ws_client.connect("invite_update", self, "_on_invite_update")
+	ws_client.connect("invite_delete", self, "_on_invite_delete")
 
-func _client_ready(user: PartialUser):
+func _on_client_ready(user: PartialUser):
 	print("ws on client_ready:: ", user)
 
-func _club_create(club: PartialClub):
+func _on_club_create(club: PartialClub):
 	print("ws on club_create:: ", club)
 
 func _on_club_update(club: PartialClub):
