@@ -7,14 +7,15 @@ func _ready() -> void:
 	print("Ready!")
 	client = PCFClient.new()
 	add_child(client)
-	client.set_debug(false)
+	client.set_debug(true)
 
 	var token = Token.new()
 	token.access_token = Env.get_var("ACCESS_TOKEN")
 	client.set_token(token)
 
 	var rest_client = client.get_rest_client()
-	_setup_ws_client()
+#	_setup_ws_client()
+	_local_test()
 
 #	var create_club_params = CreateClubParams.new()
 #	create_club_params.name = "Test club 007"
@@ -157,3 +158,34 @@ func _on_invite_update(invite: PartialInvite):
 
 func _on_invite_delete(invite: PartialInvite):
 	print("ws on invite_delete:: ", invite)
+
+func _local_test():
+	var rest_client: PCFRESTClient = client.get_rest_client()
+
+	var create_user_params = CreateUserParams.new()
+	create_user_params.email = "user@domain.com"
+	create_user_params.password = "12345"
+	create_user_params.name = "Test User"
+	var user = yield(rest_client.create_user(create_user_params), "completed")
+	print(user)
+
+	var auth_params = AuthorizeParams.new()
+	auth_params.email_id = "user@domain.com"
+	auth_params.password = "12345"
+	var token = yield(rest_client.authorize(auth_params), "completed")
+	print(token)
+
+	client.set_token(token)
+
+	var create_club_params = CreateClubParams.new()
+	create_club_params.name = "Test Club Name"
+	create_club_params.description = "Club Description"
+	var club = yield(rest_client.create_club(create_club_params), "completed")
+	print(club)
+
+	var create_application_params = CreateApplicationParams.new()
+	create_application_params.description = "hey"
+	create_application_params.application_type = "club_application"
+	create_application_params.club_id = "39221934499962880"
+	var application = yield(rest_client.create_application(create_application_params), "completed")
+	print(application)

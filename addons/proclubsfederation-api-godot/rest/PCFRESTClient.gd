@@ -18,7 +18,7 @@ func get_clubs() -> Array:
 		res.append(PartialClub.new().from_json(partial_club_data))
 	return res
 
-func create_club(params: CreateClubParams):
+func create_club(params: CreateClubParams) -> Club:
 	var data = yield(_send_post_request(ENDPOINTS.CLUBS, params.to_dict()), "completed")
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error"):
 		return data
@@ -39,7 +39,7 @@ func delete_club(club_id: String) -> bool:
 
 	return true
 
-func modify_club(club_id, params: ModifyClubParams):
+func modify_club(club_id, params: ModifyClubParams) -> Club:
 	var data = yield(_send_patch_request(ENDPOINTS.CLUB % club_id, params.to_dict()), "completed")
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error"):
 		return data
@@ -239,7 +239,7 @@ func get_item(item_id: String) -> Item:
 
 	return Item.new().from_json(data)
 
-func delete_item(item_id: String):
+func delete_item(item_id: String) -> bool:
 	var data = yield(_send_delete_request(ENDPOINTS.ITEM % item_id, {}), "completed")
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error") and not data.is_no_content():
 		return data

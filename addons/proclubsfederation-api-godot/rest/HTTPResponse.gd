@@ -10,8 +10,17 @@ var response_code: int
 var headers: PoolStringArray
 var body: PoolByteArray
 
+func is_error():
+	return response_code < 200 or response_code > 299 or result != OK
+
 func is_no_content():
 	return response_code == 204 and result == OK
+
+func is_unauthorized_error():
+	return response_code == 401 and result == OK
+
+func is_forbidden_error():
+	return response_code == 403 and result == OK
 
 func is_not_found_error():
 	return response_code == 404 and result == OK
@@ -19,14 +28,8 @@ func is_not_found_error():
 func is_validation_error():
 	return response_code == 422 and result == OK
 
-func is_unauthorized_error():
-	return response_code == 401 and result == OK
-
 func is_internal_server_error():
 	return response_code == 500 and result == OK
-
-func is_error():
-	return response_code < 200 or response_code > 299 or result != OK
 
 func get_json() -> Dictionary:
 	return parse_json(get_string())
@@ -51,6 +54,9 @@ func _to_string() -> String:
 		if "detail" in json:
 			ret = json["detail"]
 		return "HTTPResponse::UnauthorizedError(" +  JSON.print(ret, "\t") + ")"
+
+	elif is_forbidden_error():
+		return "HTTPResponse::ForbiddenError(" +  JSON.print(parse_json(body_str)["detail"], "\t") + ")"
 
 	elif is_internal_server_error():
 		return "HTTPResponse::InternalServerError()"
