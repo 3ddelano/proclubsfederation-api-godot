@@ -77,7 +77,7 @@ func _ready() -> void:
 #	create_application_params.application_type = "manager_application"
 #	create_application_params.club_id = club.id
 #	res = yield(rest_client.create_application(create_application_params), "completed")
-	
+
 #	res = yield(rest_client.get_applications(), "completed")
 #	res = yield(rest_client.get_application("38173488451698688"), "completed")
 	print(res)
@@ -171,35 +171,47 @@ func _on_application_create(application: PartialApplication):
 func _on_application_delete(application: PartialApplication):
 	print("ws on application_delete:: ", application)
 
+
+
 # Used for dev testing the API
 func _local_test():
 	var rest_client: PCFRESTClient = client.get_rest_client()
 
-	var create_user_params = CreateUserParams.new()
-	create_user_params.email = "user@domain.com"
-	create_user_params.password = "12345"
-	create_user_params.name = "Test User"
-	var user = yield(rest_client.create_user(create_user_params), "completed")
-	print(user)
+#	var create_user_params = CreateUserParams.new()
+#	create_user_params.email = "user1@domain.com"
+#	create_user_params.password = "12345"
+#	create_user_params.name = "Test User"
+#	var user = yield(rest_client.create_user(create_user_params), "completed")
+#	print(user)
 
 	var auth_params = AuthorizeParams.new()
-	auth_params.email_id = "user@domain.com"
+	auth_params.email_id = "user1@domain.com"
 	auth_params.password = "12345"
 	var token = yield(rest_client.authorize(auth_params), "completed")
-	print(token)
+#	print(token)
 
 	client.set_token(token)
 
-	var create_club_params = CreateClubParams.new()
-	create_club_params.name = "Test Club Name"
-	create_club_params.description = "Club Description"
-	var club = yield(rest_client.create_club(create_club_params), "completed")
-	print(club)
+	var current_user = yield(rest_client.get_current_user(), "completed")
 
-	var create_application_params = CreateApplicationParams.new()
-	create_application_params.description = "hey"
-	create_application_params.application_type = "club_application"
-	create_application_params.club_id = "39221934499962880"
-	var application = yield(rest_client.create_application(create_application_params), "completed")
-	print(application)
+#	var create_club_params = CreateClubParams.new()
+#	create_club_params.name = "Test Club Name"
+#	create_club_params.description = "Club Description"
+#	create_club_params.public = true
+#	var club = yield(rest_client.create_club(create_club_params), "completed")
+#	print(club)
 
+#	var create_application_params = CreateApplicationParams.new()
+#	create_application_params.description = "hey"
+#	create_application_params.application_type = "club_application"
+#	create_application_params.club_id = "39221934499962880"
+#	var application = yield(rest_client.create_application(create_application_params), "completed")
+#	print(application)
+
+#	var create_invite_params = CreateInviteParams.new()
+#	create_invite_params.user_id = "39397523957239808"
+#	create_invite_params.club_id = "39395008981655552"
+#	var invite = yield(rest_client.create_invite(create_invite_params), "completed")
+#	print(invite)
+
+	print(yield(rest_client.accept_invite("39399086381731840"), "completed"))
