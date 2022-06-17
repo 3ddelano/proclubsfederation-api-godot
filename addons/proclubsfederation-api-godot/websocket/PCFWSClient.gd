@@ -45,6 +45,7 @@ signal user_award_delete(user_award)
 signal invite_create(invite)
 signal invite_update(invite)
 signal invite_delete(invite)
+signal invite_accept(invite)
 
 # -- applicatins --
 signal application_create(application)
@@ -196,6 +197,7 @@ func _handle_event(data: Dictionary):
 		"CLUB_DELETE":
 			var club = PartialClub.new().from_json(data.d)
 			emit_signal("club_delete", club)
+
 	# -- club members --
 		"CLUB_MEMBER_CREATE":
 			var club_member = PartialClubMember.new().from_json(data.d)
@@ -254,7 +256,7 @@ func _handle_event(data: Dictionary):
 		"APPLICATION_DELETE":
 			var application = PartialApplication.new().from_json(data.d)
 			emit_signal("application_delete", application)
-	
+
 	# -- invites --
 		"INVITE_CREATE":
 			var invite = PartialInvite.new().from_json(data.d)
@@ -265,6 +267,9 @@ func _handle_event(data: Dictionary):
 		"INVITE_DELETE":
 			var invite = PartialInvite.new().from_json(data.d)
 			emit_signal("invite_delete", invite)
+		"INVITE_ACCEPT":
+			var invite = PartialInvite.new().from_json(data.d)
+			emit_signal("invite_accept", invite)
 
 func get_class() -> String:
 	return "PCFWSClient"

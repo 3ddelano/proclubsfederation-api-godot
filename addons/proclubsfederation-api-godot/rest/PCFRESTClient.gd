@@ -318,6 +318,13 @@ func delete_invite(invite_id: String) -> bool:
 
 	return true
 
+func accept_invite(invite_id: String):
+	var data = yield(_send_post_request(ENDPOINTS.INVITE_ACCEPT % invite_id, {}), "completed")
+	if typeof(data) == TYPE_OBJECT and data.has_method("is_error") and not data.is_no_content():
+		return data
+
+	return PartialClubMember.new().from_json(data)
+
 func get_awards() -> Array:
 	var data = yield(_send_request(ENDPOINTS.AWARDS), "completed")
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error"):
@@ -429,6 +436,7 @@ const ENDPOINTS: Dictionary = {
 	# Invites
 	INVITES = "/invites/",
 	INVITE = "/invites/%s/",
+	INVITE_ACCEPT = "/invites/%s/accept/",
 
 	# Awards
 	AWARDS = "/awards/",
