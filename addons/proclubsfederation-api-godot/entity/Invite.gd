@@ -4,20 +4,20 @@
 
 class_name Invite
 extends Reference
-var description: String
 var id: String
 var created_at: String
 var club: PartialClub
 var user: PartialUser
 var inviter: PartialUser
+var description = null
 
 func from_json(json: Dictionary) -> Invite:
-	description = json["description"]
 	id = json["id"]
 	created_at = json["created_at"]
 	club = PartialClub.new().from_json(json["club"])
 	user = PartialUser.new().from_json(json["user"])
 	inviter = PartialUser.new().from_json(json["inviter"])
+	description = PCFUtils.get_or_default(json, "description", null)
 	return self
 
 func get_class() -> String:

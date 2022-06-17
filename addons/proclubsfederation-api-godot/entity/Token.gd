@@ -5,11 +5,11 @@
 class_name Token
 extends Reference
 var access_token: String
-var expires_at: String
+var expires_at = null
 
 func from_json(json: Dictionary) -> Token:
 	access_token = json["access_token"]
-	expires_at = PCFUtils.get_or_default(json, "expires_at", "")
+	expires_at = PCFUtils.get_or_default(json, "expires_at", null)
 	return self
 
 func get_class() -> String:

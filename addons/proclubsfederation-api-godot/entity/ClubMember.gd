@@ -4,16 +4,16 @@
 
 class_name ClubMember
 extends Reference
-var nick: String
 var user: PartialUser
 var joined_at: String
 var club: PartialClub
+var nick = null # String
 
 func from_json(json: Dictionary) -> ClubMember:
-	nick = PCFUtils.get_or_default(json, "nick", "")
 	user = PartialUser.new().from_json(json["user"])
 	joined_at = json["joined_at"]
 	club = PartialClub.new().from_json(json["club"])
+	nick = PCFUtils.get_or_default(json, "nick", null)
 	return self
 
 func get_class() -> String:

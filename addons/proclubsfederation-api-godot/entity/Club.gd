@@ -6,7 +6,7 @@ class_name Club
 extends Reference
 var description: String
 var name: String
-var public: bool
+var public = null # bool
 var id: String
 var created_at: String
 var money: int
@@ -18,7 +18,7 @@ var invites: Array # Array of PartialInvite
 func from_json(json: Dictionary) -> Club:
 	description = json["description"]
 	name = json["name"]
-	public = PCFUtils.get_or_default(json, "public", "")
+	public = PCFUtils.get_or_default(json, "public", null)
 	id = json["id"]
 	created_at = json["created_at"]
 	money = json["money"]

@@ -6,16 +6,16 @@ class_name PartialClub
 extends Reference
 var description: String
 var name: String
-var public: bool
 var id: String
 var created_at: String
 var money: int
 var member_limit: int
+var public = null # bool
 
 func from_json(json: Dictionary) -> PartialClub:
 	description = json["description"]
 	name = json["name"]
-	public = PCFUtils.get_or_default(json, "public", "")
+	public = PCFUtils.get_or_default(json, "public", null)
 	id = json["id"]
 	created_at = json["created_at"]
 	money = json["money"]
