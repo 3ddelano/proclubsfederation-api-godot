@@ -89,4 +89,4 @@ Want to support in other ways? Contact me on Discord: `@3ddelano#6033`
 
 For help / suggestions join: [3ddelano Cafe](https://discord.gg/FZY9TqW)
 
-#### Disclaimer: This project is not affiliated nor endorsed by Pro Clubs Federation
+#### Disclaimer: This project is affiliated and endorsed by Pro Clubs Federation
