@@ -31,10 +31,10 @@ signal item_update(item)
 signal item_delete(item)
 
 # -- transactions --
-signal transaction_create(item)
+signal transaction_create(transaction)
 
 # -- users --
-signal users_update(item)
+signal user_update(user)
 
 # -- user awards --
 signal user_award_create(user_award)
@@ -46,6 +46,9 @@ signal invite_create(invite)
 signal invite_update(invite)
 signal invite_delete(invite)
 
+# -- applicatins --
+signal application_create(application)
+signal application_delete(application)
 
 func init():
 	_enabled = true
@@ -98,6 +101,7 @@ func _init_wss():
 	_client.connect("connection_established", self, "_connection_established")
 	_client.connect("connection_closed", self, "_connection_closed")
 	_client.connect("data_received", self, "_data_received")
+	_client.connect("server_close_request", self, "_server_close_request")
 
 	_client.connect_to_url(_wss_url)
 	_create_timers()
@@ -110,21 +114,27 @@ func _create_timers():
 func _data_received():
 	var data = _get_json()
 	var op = int(data.op)
+	print(data)
 	match op:
 		10: # Hello
-			heartbeat_timer.start((data.d.heartbeat_interval/1000)/16)
+			heartbeat_timer.start((data.d.heartbeat_interval/1000)/8)
 			_send_identify()
 		11: # HB ACK
 			heartbeat_seq_num = int(data.s)
 		0:
 			_handle_event(data)
 
+func _server_close_request(close_code: int, reason: String):
+	print("Server requested to close with close_code %d and reason %s" % [close_code, reason])
+
 func _connection_established(protocol):
-	_client.get_peer(1).set_write_mode(WebSocketPeer.WRITE_MODE_TEXT)
+	_client.get_peer(1).set_write_mode(WebSocketPeer.WRITE_MODE_BINARY)
+	print("Connection established.")
 
 func _connection_closed(was_cleanly_closed):
 	heartbeat_timer.stop()
 	remove_child(heartbeat_timer)
+	print("Connection closed. cleanly?: %s" % was_cleanly_closed)
 
 func _process(_delta):
 	if _client:
@@ -236,6 +246,25 @@ func _handle_event(data: Dictionary):
 		"ITEM_DELETE":
 			var item = PartialItem.new().from_json(data.d)
 			emit_signal("item_delete", item)
+
+	# -- applications --
+		"APPLICATION_CREATE":
+			var application = PartialApplication.new().from_json(data.d)
+			emit_signal("application_create", application)
+		"APPLICATION_DELETE":
+			var application = PartialApplication.new().from_json(data.d)
+			emit_signal("application_delete", application)
+	
+	# -- invites --
+		"INVITE_CREATE":
+			var invite = PartialInvite.new().from_json(data.d)
+			emit_signal("invite_create", invite)
+		"INVITE_UPDATE":
+			var invite = PartialInvite.new().from_json(data.d)
+			emit_signal("invite_update", invite)
+		"INVITE_DELETE":
+			var invite = PartialInvite.new().from_json(data.d)
+			emit_signal("invite_delete", invite)
 
 func get_class() -> String:
 	return "PCFWSClient"

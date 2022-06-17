@@ -7,15 +7,16 @@ func _ready() -> void:
 	print("Ready!")
 	client = PCFClient.new()
 	add_child(client)
-	client.set_debug(false)
+	client.set_debug(true)
 
 	var token = Token.new()
 	token.access_token = Env.get_var("ACCESS_TOKEN")
 	client.set_token(token)
 
 	var rest_client = client.get_rest_client()
-	_setup_ws_client()
+	_setup_ws_client()	
 
+#   -- rest --
 #	var create_club_params = CreateClubParams.new()
 #	create_club_params.name = "Test club 007"
 #	create_club_params.description = "Test description"
@@ -65,17 +66,20 @@ func _ready() -> void:
 
 #	yield(rest_client.revoke(), "completed")
 
+#	var club
+#	var clubs = yield(rest_client.get_clubs(), "completed")
+#	if typeof(clubs) == TYPE_ARRAY:
+#		club = clubs[randi() % clubs.size()]
+
 #	var create_application_params = CreateApplicationParams.new()
 #	create_application_params.description = "test app"
-#	create_application_params.application_type = "club_application"
-#	create_application_params.club_id = "31032476856385536"
+#	create_application_params.application_type = "manager_application"
+#	create_application_params.club_id = club.id
 #	res = yield(rest_client.create_application(create_application_params), "completed")
-
-#	res = yield(rest_client.get_applications(), "completed")
-#	res = yield(rest_client.get_application("38893517443174400"), "completed")
-
+	
+	res = yield(rest_client.get_applications(), "completed")
+#	res = yield(rest_client.get_application("38173488451698688"), "completed")
 	print(res)
-
 
 # --- ws ---
 func _setup_ws_client():
@@ -96,13 +100,15 @@ func _setup_ws_client():
 	ws_client.connect("item_update", self, "_on_item_update")
 	ws_client.connect("item_delete", self, "_on_item_delete")
 	ws_client.connect("transaction_create", self, "_on_transaction_create")
-	ws_client.connect("users_update", self, "_on_users_update")
+	ws_client.connect("user_update", self, "_on_user_update")
 	ws_client.connect("user_award_create", self, "_on_user_award_create")
 	ws_client.connect("user_award_update", self, "_on_user_award_update")
 	ws_client.connect("user_award_delete", self, "_on_user_award_delete")
 	ws_client.connect("invite_create", self, "_on_invite_create")
 	ws_client.connect("invite_update", self, "_on_invite_update")
 	ws_client.connect("invite_delete", self, "_on_invite_delete")
+	ws_client.connect("application_create", self, "_on_application_create")
+	ws_client.connect("application_delete", self, "_on_application_delete")
 
 func _on_client_ready(user: PartialUser):
 	print("ws on client_ready:: ", user)
@@ -137,8 +143,8 @@ func _on_item_delete(item: PartialItem):
 func _on_transaction_create(transaction: Transaction):
 	print("ws on transaction_create:: ", transaction)
 
-func _on_users_update(user: PartialUser):
-	print("ws on users_update:: ", user)
+func _on_user_update(user: PartialUser):
+	print("ws on user_update:: ", user)
 
 func _on_user_award_create(award: PartialUserAward):
 	print("ws on user_award_create:: ", award)
@@ -157,3 +163,9 @@ func _on_invite_update(invite: PartialInvite):
 
 func _on_invite_delete(invite: PartialInvite):
 	print("ws on invite_delete:: ", invite)
+
+func _on_application_create(application: PartialApplication):
+	print("ws on application_create:: ", application)
+
+func _on_application_delete(application: PartialApplication):
+	print("ws on application_delete:: ", application)
