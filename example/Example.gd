@@ -7,7 +7,8 @@ func _ready() -> void:
 	print("Ready!")
 	client = PCFClient.new()
 	add_child(client)
-	client.set_debug(false)
+#	client.set_debug(true)
+#	return _local_test()
 
 	var token = Token.new()
 	token.access_token = Env.get_var("ACCESS_TOKEN")
@@ -15,7 +16,6 @@ func _ready() -> void:
 
 	var rest_client = client.get_rest_client()
 	_setup_ws_client()
-#	_local_test()
 
 #   -- rest --
 #	var create_club_params = CreateClubParams.new()

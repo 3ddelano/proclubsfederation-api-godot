@@ -8,6 +8,7 @@ var id: String
 var created_at: String
 var club: PartialClub
 var user: PartialUser
+var accepted = false
 var description = null
 
 func from_json(json: Dictionary) -> PartialInvite:
@@ -15,6 +16,7 @@ func from_json(json: Dictionary) -> PartialInvite:
 	created_at = json["created_at"]
 	club = PartialClub.new().from_json(json["club"])
 	user = PartialUser.new().from_json(json["user"])
+	accepted = PCFUtils.get_or_default(json, "accepted", false)
 	description = PCFUtils.get_or_default(json, "description", null)
 	return self
 
