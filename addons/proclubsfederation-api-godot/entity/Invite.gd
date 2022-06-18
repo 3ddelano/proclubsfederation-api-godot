@@ -4,6 +4,7 @@
 
 class_name Invite
 extends Reference
+var name: String
 var id: String
 var created_at: String
 var club: PartialClub
@@ -13,6 +14,7 @@ var accepted = false
 var description = null
 
 func from_json(json: Dictionary) -> Invite:
+	name = json["name"]
 	id = json["id"]
 	created_at = json["created_at"]
 	club = PartialClub.new().from_json(json["club"])
