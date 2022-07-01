@@ -3,7 +3,7 @@ extends Control
 var client: PCFClient
 var res = "Uncomment one of the methods"
 
-func _ready() -> void:
+func _ready():
 	print("Ready!")
 	client = PCFClient.new()
 	add_child(client)
@@ -176,7 +176,7 @@ func _on_application_delete(application: PartialApplication):
 # Used for dev testing the API
 func _local_test():
 	var rest_client: PCFRESTClient = client.get_rest_client()
-
+	rest_client._base_url = "http://api.proclubsfederation.com/dev"
 #	var create_user_params = CreateUserParams.new()
 #	create_user_params.email = "user1@domain.com"
 #	create_user_params.password = "12345"
@@ -185,10 +185,9 @@ func _local_test():
 #	print(user)
 
 	var auth_params = AuthorizeParams.new()
-	auth_params.email_id = "user1@domain.com"
-	auth_params.password = "12345"
+	auth_params.email_id = Env.get_var("EMAIL")
+	auth_params.password = Env.get_var("PASSWORD")
 	var token = yield(rest_client.authorize(auth_params), "completed")
-#	print(token)
 
 	client.set_token(token)
 
@@ -196,7 +195,7 @@ func _local_test():
 
 #	var create_club_params = CreateClubParams.new()
 #	create_club_params.name = "Test Club Name"
-#	create_club_params.description = "Club Description"
+#	create_club_params.description = "Test Club Description"
 #	create_club_params.public = true
 #	var club = yield(rest_client.create_club(create_club_params), "completed")
 #	print(club)
@@ -214,4 +213,4 @@ func _local_test():
 #	var invite = yield(rest_client.create_invite(create_invite_params), "completed")
 #	print(invite)
 
-	print(yield(rest_client.accept_invite("39399086381731840"), "completed"))
+#	print(yield(rest_client.accept_invite("39399086381731840"), "completed"))

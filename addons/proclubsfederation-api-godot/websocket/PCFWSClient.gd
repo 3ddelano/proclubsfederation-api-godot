@@ -115,7 +115,6 @@ func _create_timers():
 func _data_received():
 	var data = _get_json()
 	var op = int(data.op)
-	print(data)
 	match op:
 		10: # Hello
 			heartbeat_timer.start((data.d.heartbeat_interval/1000)/8)
@@ -126,16 +125,16 @@ func _data_received():
 			_handle_event(data)
 
 func _server_close_request(close_code: int, reason: String):
-	print("Server requested to close with close_code %d and reason %s" % [close_code, reason])
+	print("PCFWSClient::Server requested to close with close_code %d and reason %s" % [close_code, reason])
 
 func _connection_established(protocol):
 	_client.get_peer(1).set_write_mode(WebSocketPeer.WRITE_MODE_BINARY)
-	print("Connection established.")
+	print("PCFWSClient::Connection established.")
 
 func _connection_closed(was_cleanly_closed):
 	heartbeat_timer.stop()
 	remove_child(heartbeat_timer)
-	print("Connection closed. cleanly?: %s" % was_cleanly_closed)
+	print("PCFWSClient::Connection closed. cleanly?: %s" % was_cleanly_closed)
 
 func _process(_delta):
 	if _client:
