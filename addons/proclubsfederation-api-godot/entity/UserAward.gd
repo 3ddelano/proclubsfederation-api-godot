@@ -5,13 +5,13 @@
 class_name UserAward
 extends Reference
 var name: String
-var award: Award
+var award: PartialAward
 var awarded_at: String
 var user: PartialUser
 
 func from_json(json: Dictionary) -> UserAward:
 	name = json["name"]
-	award = Award.new().from_json(json["award"])
+	award = PartialAward.new().from_json(json["award"])
 	awarded_at = json["awarded_at"]
 	user = PartialUser.new().from_json(json["user"])
 	return self

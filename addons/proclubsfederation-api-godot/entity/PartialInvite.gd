@@ -26,4 +26,4 @@ func get_class() -> String:
 	return "PartialInvite"
 
 func _to_string() -> String:
-	return "PartialInvite(description=%s, id=%s, created_at=%s, club=%s, user=%s)" % [description, id, created_at, club, user]
+	return "PartialInvite(name=%s, id=%s, created_at=%s, club=%s, user=%s, accepted=%s, description=%s)" % [name, id, created_at, club, user, accepted, description]
