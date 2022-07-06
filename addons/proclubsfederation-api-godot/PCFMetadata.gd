@@ -18,4 +18,4 @@ const GATEWAY_URL_LOCAL: String = "ws://127.0.0.1:8000/gateway/websocket/"
 
 const LIBRARY: String = "proclubsfederation_godot_api_wrapper"
 const LIBRARY_URL: String = "https://github.com/3ddelano"
-const LIBRARY_VERSION: String = "1.0.0"
+const LIBRARY_VERSION: String = "1.0.1"
