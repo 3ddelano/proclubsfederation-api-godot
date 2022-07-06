@@ -5,7 +5,7 @@
 class_name GiveAwardParams
 extends Reference
 var name: String
-var award_id: int
+var award_id: String
 
 func to_dict() -> Dictionary:
 	var json = {

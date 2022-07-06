@@ -365,7 +365,7 @@ func modify_award(award_id: String, params: ModifyAwardParams) -> Award:
 
 func get_applications(filter_application: String = "all") -> Array:
 	if not filter_application in ["club", "manager", "all"]:
-		print("Invalid filter_by in get_transactions()")
+		print("Invalid filter_application in get_applications(). Expected one of \"club\", \"manager\" or \"all\"")
 		return null
 	var data = yield(_send_request(ENDPOINTS.APPLICATIONS + "?filter_application=%s" % [filter_application]), "completed")
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error"):
