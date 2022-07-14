@@ -5,7 +5,7 @@
 class_name Award
 extends Reference
 var name: String
-var description: String
+var description = null # String
 var modifier: int
 var id: String
 var created_at: String
@@ -13,7 +13,7 @@ var users: Array # Array of PartialUser
 
 func from_json(json: Dictionary) -> Award:
 	name = json["name"]
-	description = json["description"]
+	description = PCFUtils.get_or_default(json, "description", null)
 	modifier = json["modifier"]
 	id = json["id"]
 	created_at = json["created_at"]

@@ -13,7 +13,7 @@ var clubs: Array # Array of PartialClub
 var owned_clubs: Array # Array of PartialClub
 var invites: Array # Array of PartialInvite
 var created_invites: Array # Array of PartialInvite
-var awards: Array # Array of PartialAward
+var awards: Array # Array of PartialUserAward
 
 func from_json(json: Dictionary) -> User:
 	name = json["name"]
@@ -35,7 +35,7 @@ func from_json(json: Dictionary) -> User:
 		invites.append(PartialInvite.new().from_json(created_invite_data))
 	awards = []
 	for award_data in json["awards"]:
-		awards.append(PartialAward.new().from_json(award_data))
+		awards.append(PartialUserAward.new().from_json(award_data))
 	return self
 
 func get_class() -> String:
