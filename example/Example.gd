@@ -1,6 +1,7 @@
 extends Control
 
 var client: PCFClient
+var rest_client: PCFRESTClient
 var res = "Uncomment one of the methods"
 
 func _ready():
@@ -14,7 +15,7 @@ func _ready():
 	token.access_token = Env.get_var("ACCESS_TOKEN")
 	client.set_token(token)
 
-	var rest_client = client.get_rest_client()
+	rest_client = client.get_rest_client()
 	_setup_ws_client()
 
 #   -- rest --
@@ -80,7 +81,21 @@ func _ready():
 
 #	res = yield(rest_client.get_applications(), "completed")
 #	res = yield(rest_client.get_application("38173488451698688"), "completed")
+
+	res = yield(rest_client.get_gateway(), "completed")
+
 	print(res)
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed:
+		if event.scancode == KEY_C:
+			var create_club_params = CreateClubParams.new()
+			create_club_params.name = "Random club 001"
+			create_club_params.description = "Test description"
+			print("creating club...")
+			res = yield(rest_client.create_club(create_club_params), "completed")
+			print(res)
+
 
 # --- ws ---
 func _setup_ws_client():
@@ -175,15 +190,17 @@ func _on_application_delete(application: PartialApplication):
 
 # Used for dev testing the API
 func _local_test():
-	var rest_client: PCFRESTClient = client.get_rest_client()
+#	rest_client._base_url = "http://localhost:8000"
 	rest_client._base_url = "http://api.proclubsfederation.com/dev"
 #	var create_user_params = CreateUserParams.new()
 #	create_user_params.email = "user1@domain.com"
 #	create_user_params.password = "12345"
 #	create_user_params.name = "Test User"
+#	print("creating user")
 #	var user = yield(rest_client.create_user(create_user_params), "completed")
 #	print(user)
 
+	print("getting auth")
 	var auth_params = AuthorizeParams.new()
 	auth_params.email_id = Env.get_var("EMAIL")
 	auth_params.password = Env.get_var("PASSWORD")
@@ -192,6 +209,7 @@ func _local_test():
 	client.set_token(token)
 
 	var current_user = yield(rest_client.get_current_user(), "completed")
+	print(current_user)
 
 #	var create_club_params = CreateClubParams.new()
 #	create_club_params.name = "Test Club Name"

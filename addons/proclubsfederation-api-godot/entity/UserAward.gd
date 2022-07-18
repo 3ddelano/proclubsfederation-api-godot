@@ -2,22 +2,18 @@
 # MIT LICENSE
 # https://github.com/3ddelano/proclubsfederation-api-godot
 
-class_name UserAward
-extends Reference
+class_name UserAward extends PCFDataclass
+
 var name: String
-var award: PartialAward
 var awarded_at: String
+
+var award: PartialAward
 var user: PartialUser
 
-func from_json(json: Dictionary) -> UserAward:
-	name = json["name"]
-	award = PartialAward.new().from_json(json["award"])
-	awarded_at = json["awarded_at"]
-	user = PartialUser.new().from_json(json["user"])
-	return self
+func _init(p_dict = null).(p_dict, "UserAward"): pass
 
-func get_class() -> String:
-	return "UserAward"
+func from_dict(p_dict: Dictionary):
+	.from_dict(p_dict)
 
-func _to_string() -> String:
-	return "UserAward(name=%s, award=%s, awarded_at=%s, user=%s)" % [name, award, awarded_at, user]
+	award = PartialAward.new(p_dict.award)
+	user = PartialUser.new(p_dict.user)

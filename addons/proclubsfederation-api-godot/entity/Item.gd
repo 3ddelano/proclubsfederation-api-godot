@@ -2,28 +2,23 @@
 # MIT LICENSE
 # https://github.com/3ddelano/proclubsfederation-api-godot
 
-class_name Item
-extends Reference
+class_name Item extends PCFDataclass
+
+var id: String
 var name: String
+var created_at: String
 var description: String
 var cost: int
-var stock: int
-var id: String
-var created_at: String
 var seller: PartialUser
 
-func from_json(json: Dictionary) -> Item:
-	name = json["name"]
-	description = json["description"]
-	cost = json["cost"]
-	stock = json["stock"]
-	id = json["id"]
-	created_at = json["created_at"]
-	seller = PartialUser.new().from_json(json["seller"])
+var stock: int = 1
+
+
+func _init(p_dict = null).(p_dict, "Item"): pass
+
+func from_dict(p_dict: Dictionary):
+	.from_dict(p_dict)
+
+	seller = PartialUser.new(p_dict.seller)
+
 	return self
-
-func get_class() -> String:
-	return "Item"
-
-func _to_string() -> String:
-	return "Item(name=%s, description=%s, cost=%s, stock=%s, id=%s, created_at=%s, seller=%s)" % [name, description, cost, stock, id, created_at, seller]

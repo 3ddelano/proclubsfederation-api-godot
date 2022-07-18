@@ -2,22 +2,21 @@
 # MIT LICENSE
 # https://github.com/3ddelano/proclubsfederation-api-godot
 
-class_name ClubMember
-extends Reference
-var user: PartialUser
+class_name ClubMember extends PCFDataclass
+
+var user: PartialUser # [PartialUser]
 var joined_at: String
-var club: PartialClub
+var club: PartialClub # [PartialClub]
+
 var nick = null # String
 
-func from_json(json: Dictionary) -> ClubMember:
-	user = PartialUser.new().from_json(json["user"])
-	joined_at = json["joined_at"]
-	club = PartialClub.new().from_json(json["club"])
-	nick = PCFUtils.get_or_default(json, "nick", null)
+
+func _init(p_dict = null).(p_dict, "ClubMember"): pass
+
+func from_dict(p_dict: Dictionary):
+	.from_dict(p_dict)
+
+	user = PartialUser.new(p_dict.user)
+	club = PartialClub.new(p_dict.club)
+
 	return self
-
-func get_class() -> String:
-	return "ClubMember"
-
-func _to_string() -> String:
-	return "ClubMember(nick=%s, user=%s, joined_at=%s, club=%s)" % [nick, user, joined_at, club]

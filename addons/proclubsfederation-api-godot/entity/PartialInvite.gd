@@ -2,28 +2,24 @@
 # MIT LICENSE
 # https://github.com/3ddelano/proclubsfederation-api-godot
 
-class_name PartialInvite
-extends Reference
-var name: String
+class_name PartialInvite extends PCFDataclass
+
 var id: String
+var name: String
 var created_at: String
 var club: PartialClub
 var user: PartialUser
-var accepted = false
-var description = null
 
-func from_json(json: Dictionary) -> PartialInvite:
-	name = json["name"]
-	id = json["id"]
-	created_at = json["created_at"]
-	club = PartialClub.new().from_json(json["club"])
-	user = PartialUser.new().from_json(json["user"])
-	accepted = PCFUtils.get_or_default(json, "accepted", false)
-	description = PCFUtils.get_or_default(json, "description", null)
+var accepted := false
+var description = null # [String]
+
+
+func _init(p_dict = null).(p_dict, "PartialInvite"): pass
+
+func from_dict(p_dict: Dictionary):
+	.from_dict(p_dict)
+
+	user = PartialUser.new(p_dict.user)
+	club = PartialClub.new(p_dict.club)
+
 	return self
-
-func get_class() -> String:
-	return "PartialInvite"
-
-func _to_string() -> String:
-	return "PartialInvite(name=%s, id=%s, created_at=%s, club=%s, user=%s, accepted=%s, description=%s)" % [name, id, created_at, club, user, accepted, description]

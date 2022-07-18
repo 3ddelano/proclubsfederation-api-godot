@@ -15,7 +15,7 @@ func get_clubs() -> Array:
 
 	var res = []
 	for partial_club_data in data:
-		res.append(PartialClub.new().from_json(partial_club_data))
+		res.append(PartialClub.new(partial_club_data))
 	return res
 
 func create_club(params: CreateClubParams) -> Club:
@@ -23,14 +23,14 @@ func create_club(params: CreateClubParams) -> Club:
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error"):
 		return data
 
-	return Club.new().from_json(data)
+	return Club.new(data)
 
 func get_club(club_id: String) -> Club:
 	var data = yield(_send_request(ENDPOINTS.CLUB % club_id), "completed")
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error"):
 		return data
 
-	return Club.new().from_json(data)
+	return Club.new(data)
 
 func delete_club(club_id: String) -> bool:
 	var data = yield(_send_delete_request(ENDPOINTS.CLUB % club_id, {}), "completed")
@@ -44,7 +44,7 @@ func modify_club(club_id, params: ModifyClubParams) -> Club:
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error"):
 		return data
 
-	return Club.new().from_json(data)
+	return Club.new(data)
 
 func get_members(club_id: String) -> Array:
 	var data = yield(_send_request(ENDPOINTS.CLUB_MEMBERS % club_id), "completed")
@@ -53,7 +53,7 @@ func get_members(club_id: String) -> Array:
 
 	var res = []
 	for partial_club_member_data in data:
-		res.append(PartialClubMember.new().from_json(partial_club_member_data))
+		res.append(PartialClubMember.new(partial_club_member_data))
 	return res
 
 func create_member(club_id: String, params: CreateMemberParams) -> ClubMember:
@@ -61,14 +61,14 @@ func create_member(club_id: String, params: CreateMemberParams) -> ClubMember:
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error"):
 		return data
 
-	return ClubMember.new().from_json(data)
+	return ClubMember.new(data)
 
 func get_member(club_id: String, member_id: String) -> ClubMember:
 	var data = yield(_send_request(ENDPOINTS.CLUB_MEMBER % [club_id, member_id]), "completed")
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error"):
 		return data
 
-	return ClubMember.new().from_json(data)
+	return ClubMember.new(data)
 
 func delete_member(club_id: String, member_id: String) -> bool:
 	var data = yield(_send_delete_request(ENDPOINTS.CLUB_MEMBER % [club_id, member_id], {}), "completed")
@@ -82,21 +82,21 @@ func modify_member(club_id: String, member_id: String, params: ModifyMemberParam
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error"):
 		return data
 
-	return ClubMember.new().from_json(data)
+	return ClubMember.new(data)
 
 func get_member_slots(club_id: String) -> ClubSlots:
 	var data = yield(_send_request(ENDPOINTS.CLUB_MEMBER_SLOTS % club_id), "completed")
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error"):
 		return data
 
-	return ClubSlots.new().from_json(data)
+	return ClubSlots.new(data)
 
 func modify_member_slots(club_id: String, params: ModifyMemberSlotsParams) -> ClubSlots:
 	var data = yield(_send_request(ENDPOINTS.CLUB_MEMBER_SLOTS % club_id, params.to_dict(), HTTPClient.METHOD_PUT), "completed")
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error"):
 		return data
 
-	return ClubSlots.new().from_json(data)
+	return ClubSlots.new(data)
 
 func get_users(only_free = false) -> Array:
 	var query_str = ""
@@ -108,7 +108,7 @@ func get_users(only_free = false) -> Array:
 
 	var res = []
 	for partial_user_data in data:
-		res.append(PartialUser.new().from_json(partial_user_data))
+		res.append(PartialUser.new(partial_user_data))
 	return res
 
 func create_user(params: CreateUserParams) -> User:
@@ -116,21 +116,21 @@ func create_user(params: CreateUserParams) -> User:
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error"):
 		return data
 
-	return User.new().from_json(data)
+	return User.new(data)
 
 func get_current_user() -> User:
 	var data = yield(_send_request(ENDPOINTS.CURRENT_USER), "completed")
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error"):
 		return data
 
-	return User.new().from_json(data)
+	return User.new(data)
 
 func get_user(user_id: String) -> User:
 	var data = yield(_send_request(ENDPOINTS.USER % user_id), "completed")
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error"):
 		return data
 
-	return User.new().from_json(data)
+	return User.new(data)
 
 func delete_user(user_id: String) -> bool:
 	var data = yield(_send_delete_request(ENDPOINTS.USER % user_id, {}), "completed")
@@ -144,7 +144,7 @@ func modify_user(user_id: String, params: ModifyUserParams) -> User:
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error"):
 		return data
 
-	return User.new().from_json(data)
+	return User.new(data)
 
 func get_user_clubs(user_id: String) -> Array:
 	var data = yield(_send_request(ENDPOINTS.USER_CLUBS % user_id), "completed")
@@ -153,15 +153,15 @@ func get_user_clubs(user_id: String) -> Array:
 
 	var res = []
 	for partial_club_data in data:
-		res.append(PartialClub.new().from_json(partial_club_data))
+		res.append(PartialClub.new(partial_club_data))
 	return res
 
-func join_club(user_id: String, params: JoinClubParams) -> PartialClub:
-	var data = yield(_send_post_request(ENDPOINTS.USER_CLUBS % user_id, params.to_dict()), "completed")
+func join_club(user_id: String, club_id: String) -> PartialClub:
+	var data = yield(_send_post_request(ENDPOINTS.USER_CLUBS % user_id, {club_id = club_id}), "completed")
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error"):
 		return data
 
-	return PartialClub.new().from_json(data)
+	return PartialClub.new(data)
 
 func leave_club(user_id: String, club_id: String) -> bool:
 	var data = yield(_send_delete_request(ENDPOINTS.USER_CLUB % [user_id, club_id], {}), "completed")
@@ -170,19 +170,19 @@ func leave_club(user_id: String, club_id: String) -> bool:
 
 	return true
 
-func get_permissions(user_id: String) -> UserPermissions:
+func get_permissions(user_id: String) -> int:
 	var data = yield(_send_request(ENDPOINTS.USER_PERMISSIONS % user_id), "completed")
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error"):
 		return data
 
-	return UserPermissions.new().from_json(data)
+	return data.permissions
 
-func change_permissions(user_id: String, params: ChangePermissionsParams) -> UserPermissions:
-	var data = yield(_send_request(ENDPOINTS.USER_PERMISSIONS % user_id, params.to_dict(), HTTPClient.METHOD_PUT), "completed")
+func change_permissions(user_id: String, permissions: int) -> int:
+	var data = yield(_send_request(ENDPOINTS.USER_PERMISSIONS % user_id, { permissions = permissions}, HTTPClient.METHOD_PUT), "completed")
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error"):
 		return data
 
-	return UserPermissions.new().from_json(data)
+	return data.permissions
 
 func get_user_awards(user_id: String) -> Array:
 	var data = yield(_send_request(ENDPOINTS.USER_AWARDS % user_id), "completed")
@@ -191,7 +191,7 @@ func get_user_awards(user_id: String) -> Array:
 
 	var res = []
 	for partial_user_award_data in data:
-		res.append(PartialUserAward.new().from_json(partial_user_award_data))
+		res.append(PartialUserAward.new(partial_user_award_data))
 	return res
 
 func give_award(user_id: String, params: GiveAwardParams) -> UserAward:
@@ -199,14 +199,14 @@ func give_award(user_id: String, params: GiveAwardParams) -> UserAward:
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error"):
 		return data
 
-	return UserAward.new().from_json(data)
+	return UserAward.new(data)
 
 func get_user_award(user_id: String, award_id: String) -> UserAward:
 	var data = yield(_send_request(ENDPOINTS.USER_AWARD % [user_id, award_id]), "completed")
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error"):
 		return data
 
-	return UserAward.new().from_json(data)
+	return UserAward.new(data)
 
 func take_award(user_id: String, award_id: String) -> bool:
 	var data = yield(_send_delete_request(ENDPOINTS.USER_AWARD % [user_id, award_id], {}), "completed")
@@ -222,7 +222,7 @@ func get_items() -> Array:
 
 	var res = []
 	for partial_item_data in data:
-		res.append(PartialItem.new().from_json(partial_item_data))
+		res.append(PartialItem.new(partial_item_data))
 	return res
 
 func create_item(params: CreateItemParams) -> Item:
@@ -230,14 +230,14 @@ func create_item(params: CreateItemParams) -> Item:
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error"):
 		return data
 
-	return Item.new().from_json(data)
+	return Item.new(data)
 
 func get_item(item_id: String) -> Item:
 	var data = yield(_send_request(ENDPOINTS.ITEM % item_id), "completed")
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error"):
 		return data
 
-	return Item.new().from_json(data)
+	return Item.new(data)
 
 func delete_item(item_id: String) -> bool:
 	var data = yield(_send_delete_request(ENDPOINTS.ITEM % item_id, {}), "completed")
@@ -251,7 +251,7 @@ func modify_item(item_id: String, params: ModifyItemParams) -> Item:
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error"):
 		return data
 
-	return Item.new().from_json(data)
+	return Item.new(data)
 
 func get_transactions(filter_by: String, object_id: String) -> Array:
 	if not filter_by in ["seller", "buyer"]:
@@ -263,7 +263,7 @@ func get_transactions(filter_by: String, object_id: String) -> Array:
 
 	var res = []
 	for transaction_data in data:
-		res.append(Transaction.new().from_json(transaction_data))
+		res.append(Transaction.new(transaction_data))
 	return res
 
 func create_transaction(params: CreateTransactionParams) -> Transaction:
@@ -271,21 +271,21 @@ func create_transaction(params: CreateTransactionParams) -> Transaction:
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error"):
 		return data
 
-	return Transaction.new().from_json(data)
+	return Transaction.new(data)
 
 func get_transaction(transaction_id: String) -> Transaction:
 	var data = yield(_send_request(ENDPOINTS.TRANSACTION % transaction_id), "completed")
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error"):
 		return data
 
-	return Transaction.new().from_json(data)
+	return Transaction.new(data)
 
 func authorize(params: AuthorizeParams) -> Token:
 	var data = yield(_send_post_request(ENDPOINTS.AUTHORIZE, params.to_dict()), "completed")
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error"):
 		return data
 
-	return Token.new().from_json(data)
+	return Token.new(data)
 
 func revoke() -> bool:
 	var data = yield(_send_post_request(ENDPOINTS.REVOKE, {}), "completed")
@@ -301,7 +301,7 @@ func get_invites() -> Array:
 
 	var res = []
 	for partial_invite_data in data:
-		res.append(PartialInvite.new().from_json(partial_invite_data))
+		res.append(PartialInvite.new(partial_invite_data))
 	return res
 
 func create_invite(params: CreateInviteParams) -> Invite:
@@ -309,7 +309,7 @@ func create_invite(params: CreateInviteParams) -> Invite:
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error"):
 		return data
 
-	return Invite.new().from_json(data)
+	return Invite.new(data)
 
 func delete_invite(invite_id: String) -> bool:
 	var data = yield(_send_delete_request(ENDPOINTS.INVITE % invite_id, {}), "completed")
@@ -318,12 +318,12 @@ func delete_invite(invite_id: String) -> bool:
 
 	return true
 
-func accept_invite(invite_id: String):
+func accept_invite(invite_id: String) -> PartialClubMember:
 	var data = yield(_send_post_request(ENDPOINTS.INVITE_ACCEPT % invite_id, {}), "completed")
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error") and not data.is_no_content():
 		return data
 
-	return PartialClubMember.new().from_json(data)
+	return PartialClubMember.new(data)
 
 func get_awards() -> Array:
 	var data = yield(_send_request(ENDPOINTS.AWARDS), "completed")
@@ -332,7 +332,7 @@ func get_awards() -> Array:
 
 	var res = []
 	for partial_award_data in data:
-		res.append(PartialAward.new().from_json(partial_award_data))
+		res.append(PartialAward.new(partial_award_data))
 	return res
 
 func create_award(params: CreateAwardParams) -> Award:
@@ -340,14 +340,14 @@ func create_award(params: CreateAwardParams) -> Award:
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error"):
 		return data
 
-	return Award.new().from_json(data)
+	return Award.new(data)
 
 func get_award(award_id: String) -> Award:
 	var data = yield(_send_request(ENDPOINTS.AWARD % award_id), "completed")
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error"):
 		return data
 
-	return Award.new().from_json(data)
+	return Award.new(data)
 
 func delete_award(award_id: String) -> bool:
 	var data = yield(_send_delete_request(ENDPOINTS.AWARD % award_id, {}), "completed")
@@ -361,7 +361,7 @@ func modify_award(award_id: String, params: ModifyAwardParams) -> Award:
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error"):
 		return data
 
-	return Award.new().from_json(data)
+	return Award.new(data)
 
 func get_applications(filter_application: String = "all") -> Array:
 	if not filter_application in ["club", "manager", "all"]:
@@ -373,7 +373,7 @@ func get_applications(filter_application: String = "all") -> Array:
 
 	var res = []
 	for partial_application_data in data:
-		res.append(PartialApplication.new().from_json(partial_application_data))
+		res.append(PartialApplication.new(partial_application_data))
 	return res
 
 func create_application(params: CreateApplicationParams) -> Application:
@@ -381,14 +381,14 @@ func create_application(params: CreateApplicationParams) -> Application:
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error"):
 		return data
 
-	return Application.new().from_json(data)
+	return Application.new(data)
 
 func get_application(application_id: String) -> Application:
 	var data = yield(_send_request(ENDPOINTS.APPLICATION % application_id), "completed")
 	if typeof(data) == TYPE_OBJECT and data.has_method("is_error"):
 		return data
 
-	return Application.new().from_json(data)
+	return Application.new(data)
 
 func delete_application(application_id: String) -> bool:
 	var data = yield(_send_delete_request(ENDPOINTS.APPLICATION % application_id, {}), "completed")
@@ -396,6 +396,20 @@ func delete_application(application_id: String) -> bool:
 		return data
 
 	return true
+
+func accept_application(application_id: String, name: String, description: String):
+	var data = yield(_send_post_request(ENDPOINTS.APPLICATION_ACCEPT % application_id, {name = name, description = description}), "completed")
+	if typeof(data) == TYPE_OBJECT and data.has_method("is_error") and not data.is_no_content():
+		return data
+
+	return Invite.new(data)
+
+func get_gateway() -> String:
+	var data = yield(_send_request(ENDPOINTS.GATEWAY), "completed")
+	if typeof(data) == TYPE_OBJECT and data.has_method("is_error") and not data.is_no_content():
+		return data
+
+	return data.url
 
 func update_url():
 	if debug:
@@ -446,8 +460,13 @@ const ENDPOINTS: Dictionary = {
 	AUTHORIZE = "/auth/authorize/",
 	REVOKE = "/auth/revoke/",
 
+	# Applications
 	APPLICATIONS = "/applications/",
 	APPLICATION = "/applications/%s/",
+	APPLICATION_ACCEPT = "/applications/%s/accept/",
+
+	# Gateway
+	GATEWAY = "/gateway/",
 }
 
 var debug = false

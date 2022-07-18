@@ -2,18 +2,9 @@
 # MIT LICENSE
 # https://github.com/3ddelano/proclubsfederation-api-godot
 
-class_name ModifyMemberParams
-extends Reference
+class_name ModifyMemberParams extends PCFDataclass
+
 var nick: String
 
-func to_dict() -> Dictionary:
-	var json = {
-		nick = nick,
-	}
-	return json
 
-func get_class() -> String:
-	return "ModifyMemberParams"
-
-func _to_string() -> String:
-	return "ModifyMemberParams(nick=%s)" % [nick]
+func _init(p_dict = null).(p_dict, "ModifyMemberParams"): pass

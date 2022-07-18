@@ -2,28 +2,25 @@
 # MIT LICENSE
 # https://github.com/3ddelano/proclubsfederation-api-godot
 
-class_name Application
-extends Reference
-var description: String
-var application_type: String
+class_name Application extends PCFDataclass
+
 var id: String
 var created_at: String
-var applicant: PartialUser
-var club = null # PartialClub
+var applicant: PartialUser # [PartialUser]
+var description: String
+var application_type: String # One of "club_application" or "manager_application"
 
-func from_json(json: Dictionary) -> Application:
-	description = json["description"]
-	application_type = json["application_type"]
-	id = json["id"]
-	created_at = json["created_at"]
-	applicant = PartialUser.new().from_json(json["applicant"])
-	var _club = PCFUtils.get_or_default(json, "club", null)
-	if _club:
-		club = PartialClub.new().from_json(_club)
+var club = null # [PartialClub]
+var accepted := false
+
+
+func _init(p_dict = null).(p_dict, "Application"): pass
+
+func from_dict(p_dict: Dictionary):
+	.from_dict(p_dict)
+
+	applicant = PartialUser.new(p_dict.applicant)
+	if "club" in p_dict:
+		club = PartialClub.new(p_dict.club)
+
 	return self
-
-func get_class() -> String:
-	return "Application"
-
-func _to_string() -> String:
-	return "Application(id=%s, description=%s, application_type=%s, created_at=%s, applicant=%s, club=%s)" % [id, description, application_type, created_at, applicant, club]

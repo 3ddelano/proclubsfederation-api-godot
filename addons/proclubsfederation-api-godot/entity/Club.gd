@@ -2,38 +2,43 @@
 # MIT LICENSE
 # https://github.com/3ddelano/proclubsfederation-api-godot
 
-class_name Club
-extends Reference
-var description: String
-var name: String
-var public = null # bool
+class_name Club extends PCFDataclass
+
 var id: String
+var name: String
+var description: String
 var created_at: String
 var money: int
 var member_limit: int
-var members: Array # Array of PartialClubMember
-var owner: PartialUser
-var invites: Array # Array of PartialInvite
 
-func from_json(json: Dictionary) -> Club:
-	description = json["description"]
-	name = json["name"]
-	public = PCFUtils.get_or_default(json, "public", null)
-	id = json["id"]
-	created_at = json["created_at"]
-	money = json["money"]
-	member_limit = json["member_limit"]
-	members = []
-	for partial_club_member_data in json["members"]:
-		members.append(PartialClubMember.new().from_json(partial_club_member_data))
-	owner = PartialUser.new().from_json(json["owner"])
-	invites = []
-	for partial_invite_data in json["invites"]:
-		invites.append(PartialInvite.new().from_json(partial_invite_data))
+var public := false
+var members: Array # [Array] of [PartialClubMember]
+var invites: Array # [Array] of [PartialInvite]
+var applications: Array # [Array] of [PartialApplication]
+var owner: PartialUser # [PartialUser]
+
+
+func _init(p_dict = null).(p_dict, "Club"): pass
+
+func from_dict(p_dict: Dictionary):
+	.from_dict(p_dict)
+
+	if "owner" in p_dict:
+		owner = PartialUser.new(p_dict.owner)
+
+	if "members" in p_dict:
+		members = []
+		for data in p_dict.members:
+			members.append(PartialClubMember.new(data))
+
+	if "invites" in p_dict:
+		invites = []
+		for data in p_dict.invites:
+			invites.append(PartialInvite.new(data))
+
+	if "applications" in p_dict:
+		applications = []
+		for data in p_dict.applications:
+			applications.append(PartialApplication.new(data))
+
 	return self
-
-func get_class() -> String:
-	return "Club"
-
-func _to_string() -> String:
-	return "Club(description=%s, name=%s, public=%s, id=%s, created_at=%s, money=%s, member_limit=%s, members=%s, owner=%s, invites=%s)" % [description, name, public, id, created_at, money, member_limit, members, owner, invites]

@@ -34,7 +34,9 @@ signal item_delete(item)
 signal transaction_create(transaction)
 
 # -- users --
+signal user_create(user)
 signal user_update(user)
+signal user_delete(user)
 
 # -- user awards --
 signal user_award_create(user_award)
@@ -50,6 +52,7 @@ signal invite_accept(invite)
 # -- applicatins --
 signal application_create(application)
 signal application_delete(application)
+
 
 func init():
 	_enabled = true
@@ -179,7 +182,7 @@ func _handle_event(data: Dictionary):
 	match event_name:
 	# -- ws --
 		"READY":
-			var user = PartialUser.new().from_json(data.d.user)
+			var user = PartialUser.new(data.d.user)
 			emit_signal("client_ready", user)
 			session_id = data.d.session_id
 
@@ -188,86 +191,92 @@ func _handle_event(data: Dictionary):
 
 	# -- clubs --
 		"CLUB_CREATE":
-			var club = PartialClub.new().from_json(data.d)
+			var club = PartialClub.new(data.d)
 			emit_signal("club_create", club)
 		"CLUB_UPDATE":
-			var club = PartialClub.new().from_json(data.d)
+			var club = PartialClub.new(data.d)
 			emit_signal("club_update", club)
 		"CLUB_DELETE":
-			var club = PartialClub.new().from_json(data.d)
+			var club = PartialClub.new(data.d)
 			emit_signal("club_delete", club)
 
 	# -- club members --
 		"CLUB_MEMBER_CREATE":
-			var club_member = PartialClubMember.new().from_json(data.d)
+			var club_member = PartialClubMember.new(data.d)
 			emit_signal("club_member_create", club_member)
 		"CLUB_MEMBER_UPDATE":
-			var club_member = PartialClubMember.new().from_json(data.d)
+			var club_member = PartialClubMember.new(data.d)
 			emit_signal("club_member_update", club_member)
 		"CLUB_MEMBER_DELETE":
-			var club_member = PartialClubMember.new().from_json(data.d)
+			var club_member = PartialClubMember.new(data.d)
 			emit_signal("club_member_delete", club_member)
 
 	# -- awards --
 		"AWARD_CREATE":
-			var award = PartialAward.new().from_json(data.d)
+			var award = PartialAward.new(data.d)
 			emit_signal("award_create", award)
 		"AWARD_UPDATE":
-			var award = PartialAward.new().from_json(data.d)
+			var award = PartialAward.new(data.d)
 			emit_signal("award_update", award)
 		"AWARD_DELETE":
-			var award = PartialAward.new().from_json(data.d)
+			var award = PartialAward.new(data.d)
 			emit_signal("award_delete", award)
 
 	# -- users --
+		"USER_CREATE":
+			var user = PartialUser.new(data.d)
+			emit_signal("user_create", user)
 		"USER_UPDATE":
-			var user = PartialUser.new().from_json(data.d)
+			var user = PartialUser.new(data.d)
 			emit_signal("user_update", user)
+		"USER_DELETE":
+			var user = PartialUser.new(data.d)
+			emit_signal("user_delete", user)
 
 	# -- user awards --
 		"USER_AWARD_CREATE":
-			var user_award = PartialUserAward.new().from_json(data.d)
+			var user_award = PartialUserAward.new(data.d)
 			emit_signal("user_award_create", user_award)
 		"USER_AWARD_DELETE":
-			var user_award = PartialUserAward.new().from_json(data.d)
+			var user_award = PartialUserAward.new(data.d)
 			emit_signal("user_award_delete", user_award)
 
 	# -- transactions --
 		"TRANSACTION_CREATE":
-			var transaction = Transaction.new().from_json(data.d)
+			var transaction = Transaction.new(data.d)
 			emit_signal("transaction_create", transaction)
 
 	# -- items --
 		"ITEM_CREATE":
-			var item = PartialItem.new().from_json(data.d)
+			var item = PartialItem.new(data.d)
 			emit_signal("item_create", item)
 		"ITEM_UPDATE":
-			var item = PartialItem.new().from_json(data.d)
+			var item = PartialItem.new(data.d)
 			emit_signal("item_update", item)
 		"ITEM_DELETE":
-			var item = PartialItem.new().from_json(data.d)
+			var item = PartialItem.new(data.d)
 			emit_signal("item_delete", item)
 
 	# -- applications --
 		"APPLICATION_CREATE":
-			var application = PartialApplication.new().from_json(data.d)
+			var application = PartialApplication.new(data.d)
 			emit_signal("application_create", application)
 		"APPLICATION_DELETE":
-			var application = PartialApplication.new().from_json(data.d)
+			var application = PartialApplication.new(data.d)
 			emit_signal("application_delete", application)
 
 	# -- invites --
 		"INVITE_CREATE":
-			var invite = PartialInvite.new().from_json(data.d)
+			var invite = PartialInvite.new(data.d)
 			emit_signal("invite_create", invite)
 		"INVITE_UPDATE":
-			var invite = PartialInvite.new().from_json(data.d)
+			var invite = PartialInvite.new(data.d)
 			emit_signal("invite_update", invite)
 		"INVITE_DELETE":
-			var invite = PartialInvite.new().from_json(data.d)
+			var invite = PartialInvite.new(data.d)
 			emit_signal("invite_delete", invite)
 		"INVITE_ACCEPT":
-			var invite = PartialInvite.new().from_json(data.d)
+			var invite = PartialInvite.new(data.d)
 			emit_signal("invite_accept", invite)
 
 func get_class() -> String:
