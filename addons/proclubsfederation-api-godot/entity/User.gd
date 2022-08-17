@@ -5,6 +5,7 @@
 class_name User extends PCFDataclass
 
 var id: String
+var psn_name: String
 var name: String
 var money: int
 var created_at: String

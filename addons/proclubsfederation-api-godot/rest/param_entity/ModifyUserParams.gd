@@ -5,6 +5,7 @@
 class_name ModifyUserParams extends PCFDataclass
 
 var name = null # [String]
+var psn_name = null # [String]
 var money = null # [int]
 var agent_type = null # [String]
 
