@@ -85,7 +85,9 @@ Support the project development
 -----------
 <a href="https://www.buymeacoffee.com/3ddelano" target="_blank"><img height="41" width="174" src="https://cdn.buymeacoffee.com/buttons/v2/default-red.png" alt="Buy Me A Coffee" width="150" ></a>
 
-Want to support in other ways? Contact me on Discord: `@3ddelano#6033`
+Want to support in other ways? Contact me on Discord: `@3ddelano`
+
+You can also contact `@sairam` for more details.
 
 For help / suggestions join: [3ddelano Cafe](https://discord.gg/FZY9TqW)
 
